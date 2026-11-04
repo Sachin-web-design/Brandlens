@@ -1,0 +1,154 @@
+{
+ "name": "Nourish Daily (fictional demo brand)",
+ "tone": {
+  "summary": "Friendly and calm. Describe benefits plainly, do not hype.",
+  "avoid": [
+   "amazing",
+   "insane",
+   "mind-blowing",
+   "epic",
+   "game-changer",
+   "must-have"
+  ],
+  "caps_ok": [
+   "ASCI",
+   "WCAG",
+   "FSSAI"
+  ],
+  "source_hype": "Voice guide 1.2: Be friendly and calm. Describe the benefit, do not hype it.",
+  "source_excl": "Voice guide 1.3: Use at most one exclamation mark per post.",
+  "source_caps": "Voice guide 1.4: Do not write whole words in capitals."
+ },
+ "terms": [
+  {
+   "rule": "T-1",
+   "avoid": [
+    "cheap"
+   ],
+   "use": "affordable",
+   "source": "Terminology 2.1: Say 'affordable', never 'cheap'."
+  },
+  {
+   "rule": "T-2",
+   "avoid": [
+    "NourishDaily",
+    "Nourish-Daily"
+   ],
+   "use": "Nourish Daily",
+   "source": "Terminology 2.2: The brand name is written as two words, 'Nourish Daily'."
+  },
+  {
+   "rule": "T-3",
+   "avoid": [
+    "guys"
+   ],
+   "use": "everyone",
+   "source": "Terminology 2.3: Use inclusive language, say 'everyone'."
+  }
+ ],
+ "claim_rules": [
+  {
+   "rule": "C-1",
+   "severity": "medium",
+   "pattern": "\\b(?:the\\s+)?best\\b|#1\\b|\\bnumber\\s*one\\b|\\btastiest\\b|\\bhealthiest\\b|\\bworld'?s\\s+\\w+est\\b",
+   "why": "Superlative claim with no evidence on file.",
+   "source": "Claims policy 3.1: Do not use 'best', '#1' or similar unless evidence is on file.",
+   "fix": "Describe a specific, checkable benefit instead (for example the protein per bar)."
+  },
+  {
+   "rule": "C-2",
+   "severity": "high",
+   "pattern": "\\bguarantee[ds]?\\b|\\b100\\s?%\\s*(?:natural|safe|organic)\\b|\\brisk[- ]free\\b",
+   "why": "Absolute guarantee that cannot be supported.",
+   "source": "Claims policy 3.2: No guarantees or absolute claims.",
+   "fix": "Remove the guarantee. Say what the product contains, not what it will do for the buyer."
+  },
+  {
+   "rule": "C-3",
+   "severity": "high",
+   "pattern": "\\b(?:lose|losing)\\s+weight\\b|\\bweight\\s+loss\\b|\\bdetox\\b|\\bcure[sd]?\\b|\\bclinically\\s+proven\\b|\\bmiracle\\b|\\bboosts?\\s+immunity\\b",
+   "why": "Health or weight-loss claim with no approved evidence.",
+   "source": "Claims policy 3.3 (inspired by ASCI advertising guidance): No unproven health or weight-loss claims.",
+   "fix": "Remove the claim. Use only nutrition facts from the approved facts list."
+  }
+ ],
+ "approved_claims": [
+  {
+   "id": "A-1",
+   "text": "no added preservatives",
+   "evidence": "Lab report LR-2025-14"
+  },
+  {
+   "id": "A-2",
+   "text": "made with whole oats",
+   "evidence": "Ingredient list v3"
+  }
+ ],
+ "facts": [
+  {
+   "id": "F-1",
+   "label": "Protein per bar",
+   "text": "Each bar has 8 g of protein.",
+   "value": 8,
+   "owner": "Product team",
+   "valid_until": null,
+   "pattern": "(\\d+(?:\\.\\d+)?)\\s*g(?:rams?)?\\s*(?:of\\s*)?protein"
+  },
+  {
+   "id": "F-2",
+   "label": "Price per bar",
+   "text": "One bar costs Rs 49.",
+   "value": 49,
+   "owner": "Sales team",
+   "valid_until": null,
+   "pattern": "(?:₹|rs\\.?\\s?|inr\\s?)\\s?(\\d+)"
+  },
+  {
+   "id": "F-3",
+   "label": "Founding year",
+   "text": "Nourish Daily was founded in 2019.",
+   "value": 2019,
+   "owner": "Brand team",
+   "valid_until": null,
+   "pattern": "(?:founded|started|launched|since)[^.\\d]{0,40}(20\\d{2})"
+  },
+  {
+   "id": "F-4",
+   "label": "Diwali offer (20% off)",
+   "text": "Flat 20% off, valid until 15 Nov 2025.",
+   "value": null,
+   "owner": "Marketing team",
+   "valid_until": "2025-11-15",
+   "pattern": "diwali\\s+(?:special|offer|sale)|flat\\s*20\\s*%\\s*off"
+  },
+  {
+   "id": "F-5",
+   "label": "Calories per bar",
+   "text": "Each bar has 190 kcal.",
+   "value": 190,
+   "owner": "Product team",
+   "valid_until": null,
+   "pattern": "(\\d+)\\s*(?:kcal|calories)"
+  }
+ ],
+ "disclosure": {
+  "rule": "D-1",
+  "pattern": "\\b(?:partnered\\s+with|paid\\s+partnership|gifted|in\\s+collaboration\\s+with|collab)\\b",
+  "ok": "#ad\\b|#sponsored\\b|#paidpartnership\\b|#gifted\\b",
+  "source": "Disclosure policy 4.1 (inspired by ASCI influencer guidance): Label partnerships clearly with #ad or #sponsored."
+ },
+ "samples": [
+  {
+   "name": "Sample 1: many issues",
+   "text": "NourishDaily protein bars are the BEST snack in India!!! Each bar has 12 g of protein and costs just Rs 59. Guaranteed to help you lose weight. Grab yours today, it's cheap! #healthysnacksforyou"
+  },
+  {
+   "name": "Sample 2: facts and disclosure",
+   "text": "Nourish Daily started in 2017 and 9 out of 10 customers say it is the tastiest snack ever. Made with whole oats and no added preservatives. Partnered with @fitwithriya for this launch."
+  },
+  {
+   "name": "Sample 3: clean post",
+   "text": "Meet the new Nourish Daily oat bar. Each bar has 8 g of protein and costs Rs 49. Made with whole oats and no added preservatives. #NourishDaily"
+  }
+ ]
+}

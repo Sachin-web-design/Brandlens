@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BrandLens</title>
+<style>
+:root{--bg:#fff;--fg:#2c2c2a;--mut:#5f5e5a;--card:#f5f5f2;--bd:#d3d1c7;--g:#0f6e56;--gl:#e1f5ee;--hi:#fbd5d5;--me:#ffe9b3;--lo:#dbe7ff;--ok:#d4f0df}
+@media(prefers-color-scheme:dark){:root{--bg:#1b1b19;--fg:#ececea;--mut:#a8a69e;--card:#262624;--bd:#3d3d3a;--g:#5dcaa5;--gl:#0f3d30;--hi:#6b2323;--me:#6b5110;--lo:#23396b;--ok:#17492c}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+header{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 16px;border-bottom:1px solid var(--bd)}
+h1{margin:0;font-size:22px;color:var(--g)}header .sp{flex:1}.banner{background:var(--gl);padding:8px 16px;font-size:13px}
+nav{display:flex;gap:6px;padding:10px 16px;flex-wrap:wrap}nav button.on{background:var(--g);color:var(--bg);border-color:var(--g)}
+main{max-width:980px;margin:0 auto;padding:0 16px 40px}section{display:none}section.on{display:block}
+button,select,input,textarea{font:inherit;color:var(--fg);background:var(--card);border:1px solid var(--bd);border-radius:8px;padding:6px 10px}
+button{cursor:pointer}button.p{background:var(--g);color:var(--bg);border-color:var(--g);font-weight:600}
+textarea{width:100%;min-height:110px}input.w{width:100%}.row{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0;align-items:center}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:10px 12px;margin:8px 0}
+.pill{font-size:12px;padding:1px 8px;border-radius:99px;margin-right:6px}.high{background:var(--hi)}.medium{background:var(--me)}.low{background:var(--lo)}.info{background:var(--ok)}
+mark{color:inherit;border-radius:3px;padding:0 2px}.mut{color:var(--mut);font-size:13px}.src{font-size:13px;border-left:3px solid var(--g);padding-left:8px;margin:4px 0}
+.bar{height:10px;background:var(--g);border-radius:5px}.hl{white-space:pre-wrap;background:var(--card);border:1px solid var(--bd);border-radius:8px;padding:10px}
+table{border-collapse:collapse;width:100%}td,th{border:1px solid var(--bd);padding:4px 8px;text-align:left;font-size:13px}.err{color:#c0392b}
+</style></head><body>
+<header><h1>BrandLens</h1><span class="mut" id="brand"></span><span class="sp"></span>
+<label>Viewing as <select id="role"><option value="creator">Creator</option><option value="reviewer">Reviewer</option><option value="manager">Manager</option></select></label></header>
+<div class="banner">Demo mode: no login needed. Switch the role above. AI only suggests; a human always makes the final decision.</div>
+<nav id="tabs"><button data-t="new" class="on">1. Review content</button><button data-t="queue">2. Review queue</button><button data-t="insights">3. Insights</button><button data-t="kb">Brand knowledge</button></nav>
+<main>
+<section id="new" class="on">
+ <div class="row"><input class="w" id="title" placeholder="Title, e.g. Diwali launch post"><select id="channel"><option>Instagram post</option><option>Website</option><option>Email</option><option>Influencer post</option></select><select id="sample"><option value="">Load a sample...</option></select></div>
+ <textarea id="text" placeholder="Paste your content here"></textarea>
+ <div class="row"><label><input type="checkbox" id="img"> Image attached</label><input class="w" id="alt" placeholder="Alt text for the image" style="flex:1"><button class="p" id="run">Run review</button></div>
+ <div id="res"></div>
+</section>
+<section id="queue"></section><section id="insights"></section><section id="kb"></section>
+</main>
+<script>
+const $=s=>document.querySelector(s);
+const esc=t=>String(t==null?'':t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const S={findings:[],decisions:{},fixes:[],open:null,brand:null};
+const REASONS=['Not applicable here','Guideline is unclear','Approved exception','Verified elsewhere'];
+async function api(p,b){const r=await fetch(p,b?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)}:undefined);const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.detail||'Request failed');return j}
+const role=()=>$('#role').value;
+function tab(t){document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));document.querySelectorAll('section').forEach(s=>s.classList.toggle('on',s.id===t));if(t==='queue')loadQueue();if(t==='insights')loadInsights();if(t==='kb')loadKb()}
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>tab(b.dataset.t));
+$('#role').onchange=()=>{const t=document.querySelector('section.on').id;if(t==='queue')loadQueue()};
+function hl(text,fs){const sp=fs.filter(f=>f.start!=null&&f.status==='issue').sort((a,b)=>a.start-b.start);let o='',p=0;for(const f of sp){if(f.start<p)continue;o+=esc(text.slice(p,f.start))+`<mark class="${f.severity}" title="${esc(f.rule_id)}">${esc(text.slice(f.start,f.end))}</mark>`;p=f.end}return o+esc(text.slice(p))}
+function pending(){return S.findings.filter(f=>['high','medium'].includes(f.severity)&&f.status==='issue'&&!S.decisions[f.id])}
+async function run(){const text=$('#text').value;if(!text.trim()){$('#res').innerHTML='<p class="err">Please paste some content first.</p>';return}
+ const r=await api('/api/review',{text,channel:$('#channel').value,has_image:$('#img').checked,alt_text:$('#alt').value});S.findings=r.findings;
+ const ids=new Set(r.findings.map(f=>f.id));for(const k in S.decisions)if(!ids.has(k))delete S.decisions[k];draw(r.counts)}
+function card(f,i){const d=S.decisions[f.id],s=f.suggestion;let a='';
+ if(f.status==='supported')return `<div class="card"><span class="pill info">supported</span><b>${esc(f.text)}</b><div class="src">${esc(f.why)} ${esc(f.source)}</div></div>`;
+ if(s&&s.type==='replace')a+=`<button onclick="fix(${i})">Apply fix: ${esc(s.with)}</button> `;
+ if(s&&s.type==='append')a+=`<button onclick="fix(${i})">Apply fix: add${esc(s.text)}</button> `;
+ if(s&&s.type==='note')a+=`<div class="mut">Suggestion: ${esc(s.text)}</div>`;
+ a+=d?`<div class="mut">Dismissed: ${esc(d.reason)} <button onclick="undo(${i})">Undo</button></div>`:`<select id="r${i}">${REASONS.map(x=>`<option>${x}</option>`).join('')}</select> <button onclick="dis(${i})">Dismiss</button>`;
+ return `<div class="card"><span class="pill ${f.severity}">${f.severity}</span><span class="pill info">${esc(f.category)}</span><b>${esc(f.text||'(whole post)')}</b> <span class="mut">confidence: ${esc(f.confidence)}</span><div>${esc(f.why)}</div><div class="src">${esc(f.rule_id)}: ${esc(f.source)}</div>${a}</div>`}
+function draw(c){const p=pending().length;$('#res').innerHTML=`<h3>Findings <span class="mut">${c.high} high, ${c.medium} medium, ${c.low} low</span></h3><div class="hl">${hl($('#text').value,S.findings)}</div>${S.findings.length?S.findings.map(card).join(''):'<div class="card">No issues found.</div>'}
+ <div class="card"><b>Next:</b> ${p?`<span class="err">${p} high or medium finding(s) still need a fix or a dismissal reason.</span>`:'Ready to send for human review.'}<div class="row"><button class="p" ${p?'disabled':''} onclick="submitIt()">Submit for human review</button></div><div id="msg"></div></div>`}
+function counts(){const c={high:0,medium:0,low:0};S.findings.forEach(f=>{if(c[f.severity]!==undefined&&f.status==='issue')c[f.severity]++});return c}
+async function fix(i){const f=S.findings[i],s=f.suggestion;let t=$('#text').value,after;
+ if(s.type==='replace'){after=s.with;t=t.slice(0,f.start)+s.with+t.slice(f.end)}else{after=s.text;t=t.trimEnd()+s.text}
+ S.fixes.push({rule_id:f.rule_id,before:f.text,after});$('#text').value=t;await run()}
+function dis(i){const f=S.findings[i];S.decisions[f.id]={action:'dismissed',reason:$('#r'+i).value};draw(counts())}
+function undo(i){delete S.decisions[S.findings[i].id];draw(counts())}
+async function submitIt(){try{const s=await api('/api/submissions',{title:$('#title').value,author:'Demo creator',text:$('#text').value,channel:$('#channel').value,has_image:$('#img').checked,alt_text:$('#alt').value,decisions:S.decisions,applied_fixes:S.fixes});
+ S.decisions={};S.fixes=[];S.open=s.id;tab('queue')}catch(e){$('#msg').innerHTML=`<p class="err">${esc(e.message)}</p>`}}
+async function loadQueue(){const items=await api('/api/submissions');const el=$('#queue');
+ let h='<h3>Review queue</h3>'+items.map(s=>`<div class="card"><b>${esc(s.title)}</b> <span class="pill ${s.status==='Approved'?'info':s.status==='In review'?'medium':'high'}">${esc(s.status)}</span> <span class="mut">${esc(s.author)}, ${esc(s.channel)}</span> <button onclick="openSub('${s.id}')">Open</button></div>`).join('');
+ const s=items.find(x=>x.id===S.open);if(s)h+=detail(s);el.innerHTML=h}
+function openSub(id){S.open=id;loadQueue()}
+function detail(s){const can=role()!=='creator'&&s.status==='In review';
+ const fs=s.findings.filter(f=>f.status==='issue').map(f=>`<tr><td>${f.severity}</td><td>${esc(f.rule_id)}</td><td>${esc(f.text)}</td><td>${f.decision?'Dismissed: '+esc(f.decision.reason):'Open'}</td></tr>`).join('');
+ return `<div class="card" style="border-color:var(--g)"><h3>${esc(s.title)} <span class="mut">${esc(s.id)}</span></h3><div class="hl">${esc(s.text)}</div>
+ <p class="mut">Creator applied ${s.applied_fixes.length} suggested fix(es).</p>${fs?`<table><tr><th>Severity</th><th>Rule</th><th>Text</th><th>Creator decision</th></tr>${fs}</table>`:'<p class="mut">No open issues.</p>'}
+ <h4>History</h4>${s.history.map(h=>`<div class="mut">${esc(h.at.slice(0,16).replace('T',' '))} | ${esc(h.who)} | ${esc(h.action)} ${esc(h.comment)}</div>`).join('')}
+ <h4>Comments</h4>${s.comments.map(c=>`<div class="mut">${esc(c.who)}: ${esc(c.text)}</div>`).join('')||'<div class="mut">None yet.</div>'}
+ <div class="row"><input class="w" id="cm" placeholder="Add a comment" style="flex:1"><button onclick="comment('${s.id}')">Comment</button></div>
+ ${can?`<h4>Your decision (${role()})</h4><textarea id="dc" placeholder="Comment (required when requesting changes)"></textarea><div class="row"><button class="p" onclick="decide('${s.id}','approve')">Approve</button><button onclick="decide('${s.id}','request_changes')">Request changes</button></div>`:`<p class="mut">${s.status==='In review'?'Switch to Reviewer or Manager (top right) to decide.':'Decision recorded.'}</p>`}<div id="dm"></div></div>`}
+async function decide(id,a){try{await api(`/api/submissions/${id}/decision`,{role:role(),action:a,comment:$('#dc').value});loadQueue()}catch(e){$('#dm').innerHTML=`<p class="err">${esc(e.message)}</p>`}}
+async function comment(id){const t=$('#cm').value;if(!t.trim())return;await api(`/api/submissions/${id}/comments`,{role:role(),text:t});loadQueue()}
+async function loadInsights(){const d=await api('/api/insights');const mx=Math.max(1,...Object.values(d.by_category));
+ const rows=o=>Object.entries(o).map(([k,v])=>`<div class="row"><span style="width:120px">${esc(k)}</span><div class="bar" style="width:${Math.round(v/mx*260)+10}px"></div> ${v}</div>`).join('')||'<div class="mut">No data yet.</div>';
+ $('#insights').innerHTML=`<h3>Governance insights</h3><div class="card"><b>${d.total}</b> submissions: ${Object.entries(d.statuses).map(([k,v])=>esc(k)+' '+v).join(', ')}. Suggested fixes applied: ${d.fixes_applied}.</div>
+ <div class="card"><h4>Issues by category</h4>${rows(d.by_category)}</div><div class="card"><h4>Most frequent rules</h4>${d.top_rules.map(r=>`<div>${esc(r[0])}: ${r[1]}</div>`).join('')||'<div class="mut">No data yet.</div>'}</div>
+ <div class="card"><h4>Most dismissed rules</h4><div class="mut">Rules creators often dismiss may be unclear or too strict.</div>${d.dismissed_rules.map(r=>`<div>${esc(r[0])}: dismissed ${r[1]} time(s)</div>`).join('')||'<div class="mut">No dismissals yet.</div>'}</div>`}
+async function loadKb(){const b=S.brand;$('#kb').innerHTML=`<h3>Brand knowledge base</h3><p class="mut">${esc(b.name)}. Tone: ${esc(b.tone)}</p>
+ <div class="card"><h4>Approved facts</h4><table><tr><th>ID</th><th>Fact</th><th>Owner</th><th>Valid until</th></tr>${b.facts.map(f=>`<tr><td>${f.id}</td><td>${esc(f.text)}</td><td>${esc(f.owner)}</td><td>${esc(f.valid_until||'no expiry')}</td></tr>`).join('')}</table></div>
+ <div class="card"><h4>Terminology</h4>${b.terms.map(t=>`<div>${esc(t.rule)}: avoid ${esc(t.avoid.join(', '))}, use <b>${esc(t.use)}</b></div>`).join('')}</div>
+ <div class="card"><h4>Claim rules</h4>${b.claims.map(c=>`<div>${esc(c.rule)}: ${esc(c.source)}</div>`).join('')}</div>
+ <div class="card"><h4>Approved claims</h4>${b.approved_claims.map(c=>`<div>${esc(c.id)}: ${esc(c.text)} (evidence: ${esc(c.evidence)})</div>`).join('')}</div>`}
+$('#run').onclick=()=>run().catch(e=>{$('#res').innerHTML=`<p class="err">${esc(e.message)}</p>`});
+api('/api/brand').then(b=>{S.brand=b;$('#brand').textContent='Brand: '+b.name;b.samples.forEach((s,i)=>{const o=document.createElement('option');o.value=i;o.textContent=s.name;$('#sample').appendChild(o)})});
+$('#sample').onchange=e=>{if(e.target.value==='')return;S.decisions={};S.fixes=[];$('#text').value=S.brand.samples[e.target.value].text;$('#title').value=S.brand.samples[e.target.value].name;$('#res').innerHTML=''};
+</script></body></html>
