@@ -51,14 +51,29 @@ function card(f,i){const d=S.decisions[f.id],s=f.suggestion;let a='';
  if(f.status==='supported')return `<div class="card"><span class="pill info">supported</span><b>${esc(f.text)}</b><div class="src">${esc(f.why)} ${esc(f.source)}</div></div>`;
  if(s&&s.type==='replace')a+=`<button onclick="fix(${i})">Apply fix: ${esc(s.with)}</button> `;
  if(s&&s.type==='append')a+=`<button onclick="fix(${i})">Apply fix: add${esc(s.text)}</button> `;
+ if(s&&s.type==='remove_sentence')a+=`<div class="mut">Suggestion: ${esc(s.text)}</div><button onclick="fix(${i})">Remove sentence</button> `;
  if(s&&s.type==='note')a+=`<div class="mut">Suggestion: ${esc(s.text)}</div>`;
  a+=d?`<div class="mut">Dismissed: ${esc(d.reason)} <button onclick="undo(${i})">Undo</button></div>`:`<select id="r${i}">${REASONS.map(x=>`<option>${x}</option>`).join('')}</select> <button onclick="dis(${i})">Dismiss</button>`;
  return `<div class="card"><span class="pill ${f.severity}">${f.severity}</span><span class="pill info">${esc(f.category)}</span><b>${esc(f.text||'(whole post)')}</b> <span class="mut">confidence: ${esc(f.confidence)}</span><div>${esc(f.why)}</div><div class="src">${esc(f.rule_id)}: ${esc(f.source)}</div>${a}</div>`}
-function draw(c){const p=pending().length;$('#res').innerHTML=`<h3>Findings <span class="mut">${c.high} high, ${c.medium} medium, ${c.low} low</span></h3><div class="hl">${hl($('#text').value,S.findings)}</div>${S.findings.length?S.findings.map(card).join(''):'<div class="card">No issues found.</div>'}
+function draw(c){const p=pending().length;$('#res').innerHTML=`<h3>Findings <span class="mut">${c.high} high, ${c.medium} medium, ${c.low} low</span></h3>${tools()}<div class="hl">${hl($('#text').value,S.findings)}</div>${S.findings.length?S.findings.map(card).join(''):'<div class="card">No issues found.</div>'}
  <div class="card"><b>Next:</b> ${p?`<span class="err">${p} high or medium finding(s) still need a fix or a dismissal reason.</span>`:'Ready to send for human review.'}<div class="row"><button class="p" ${p?'disabled':''} onclick="submitIt()">Submit for human review</button></div><div id="msg"></div></div>`}
+function applyAll(text,fs){const rm=[],ed=[];for(const f of fs){const s=f.suggestion;if(f.status!=='issue'||!s)continue;
+ if(s.type==='remove_sentence')rm.push([s.start,s.end]);else if(s.type==='replace'&&f.start!=null)ed.push([f.start,f.end,s.with])}
+ rm.sort((a,b)=>a[0]-b[0]);const m=[];for(const r of rm){const l=m[m.length-1];if(l&&r[0]<l[1])l[1]=Math.max(l[1],r[1]);else m.push(r.slice())}
+ const all=m.map(r=>[r[0],r[1],'']).concat(ed.filter(e=>!m.some(r=>e[0]>=r[0]&&e[1]<=r[1])));
+ all.sort((a,b)=>b[0]-a[0]);let t=text,n=0,last=Infinity;for(const [a,b,rep] of all){if(b>last)continue;t=t.slice(0,a)+rep+t.slice(b);last=a;n++}
+ for(const f of fs){if(f.status==='issue'&&f.suggestion&&f.suggestion.type==='append'&&!t.includes(f.suggestion.text.trim())){t=t.trimEnd()+f.suggestion.text;n++}}
+ return {text:t.replace(/[ \t]{2,}/g,' ').trim(),n}}
+//END applyAll
+function tools(){const n=applyAll($('#text').value,S.findings).n;return `<div class="row">${n?`<button class="p" onclick="fixAll()">Fix all suggested (${n})</button>`:''}${S.prev!=null?'<button onclick="undoAll()">Undo last Fix all</button>':''}<span class="mut">Fixes are applied to your text only. Review the result before you submit.</span></div>`}
+async function fixAll(){const r=applyAll($('#text').value,S.findings);if(!r.n)return;S.prev=$('#text').value;S.prevFixes=S.fixes.length;
+ S.findings.forEach(f=>{const s=f.suggestion;if(f.status==='issue'&&s&&['replace','append','remove_sentence'].includes(s.type))S.fixes.push({rule_id:f.rule_id,before:f.text,after:'auto'})});
+ $('#text').value=r.text;await run()}
+function undoAll(){if(S.prev==null)return;$('#text').value=S.prev;S.fixes.length=S.prevFixes;S.prev=null;run()}
 function counts(){const c={high:0,medium:0,low:0};S.findings.forEach(f=>{if(c[f.severity]!==undefined&&f.status==='issue')c[f.severity]++});return c}
 async function fix(i){const f=S.findings[i],s=f.suggestion;let t=$('#text').value,after;
- if(s.type==='replace'){after=s.with;t=t.slice(0,f.start)+s.with+t.slice(f.end)}else{after=s.text;t=t.trimEnd()+s.text}
+ if(s.type==='replace'){after=s.with;t=t.slice(0,f.start)+s.with+t.slice(f.end)}else if(s.type==='remove_sentence'){after='';t=t.slice(0,s.start)+t.slice(s.end)}else{after=s.text;t=t.trimEnd()+s.text}
+ t=t.replace(/[ \t]{2,}/g,' ').trim();
  S.fixes.push({rule_id:f.rule_id,before:f.text,after});$('#text').value=t;await run()}
 function dis(i){const f=S.findings[i];S.decisions[f.id]={action:'dismissed',reason:$('#r'+i).value};draw(counts())}
 function undo(i){delete S.decisions[S.findings[i].id];draw(counts())}
@@ -90,5 +105,5 @@ async function loadKb(){const b=S.brand;$('#kb').innerHTML=`<h3>Brand knowledge 
  <div class="card"><h4>Approved claims</h4>${b.approved_claims.map(c=>`<div>${esc(c.id)}: ${esc(c.text)} (evidence: ${esc(c.evidence)})</div>`).join('')}</div>`}
 $('#run').onclick=()=>run().catch(e=>{$('#res').innerHTML=`<p class="err">${esc(e.message)}</p>`});
 api('/api/brand').then(b=>{S.brand=b;$('#brand').textContent='Brand: '+b.name;b.samples.forEach((s,i)=>{const o=document.createElement('option');o.value=i;o.textContent=s.name;$('#sample').appendChild(o)})});
-$('#sample').onchange=e=>{if(e.target.value==='')return;S.decisions={};S.fixes=[];$('#text').value=S.brand.samples[e.target.value].text;$('#title').value=S.brand.samples[e.target.value].name;$('#res').innerHTML=''};
+$('#sample').onchange=e=>{if(e.target.value==='')return;S.decisions={};S.fixes=[];S.prev=null;$('#text').value=S.brand.samples[e.target.value].text;$('#title').value=S.brand.samples[e.target.value].name;$('#res').innerHTML=''};
 </script></body></html>

@@ -19,6 +19,16 @@ def _fmt(v):
     return str(int(v)) if float(v).is_integer() else str(v)
 
 
+def _rm(text, m, hint):
+    """Suggest removing the whole sentence that contains the match (shown to the user, never automatic)."""
+    start, end = m.start(), m.end()
+    for sm in re.finditer(r"[^.!?]+[.!?]*\s*", text):
+        if sm.start() <= start < sm.end():
+            start, end = sm.start(), sm.end()
+            break
+    return {"type": "remove_sentence", "text": hint, "start": start, "end": end}
+
+
 def review(text, channel="social", has_image=False, alt_text="", today=None):
     today = today or date.today()
     out = []
@@ -35,7 +45,7 @@ def review(text, channel="social", has_image=False, alt_text="", today=None):
     for c in BRAND["claim_rules"]:
         for m in re.finditer(c["pattern"], text, re.I):
             out.append(_mk("claims", c["severity"], m.start(), m.end(), m.group(), c["why"], c["rule"], c["source"],
-                           {"type": "note", "text": c["fix"]}))
+                           _rm(text, m, c["fix"])))
     for c in BRAND["approved_claims"]:
         for m in re.finditer(re.escape(c["text"]), text, re.I):
             out.append(_mk("claims", "info", m.start(), m.end(), m.group(),
@@ -52,7 +62,7 @@ def review(text, channel="social", has_image=False, alt_text="", today=None):
             if expired:
                 out.append(_mk("facts", "high", m.start(), m.end(), m.group(),
                                "Outdated: this offer or fact expired on %s." % f["valid_until"], f["id"], src,
-                               {"type": "note", "text": "Remove it, or ask the owner (%s) for a current version." % f["owner"]}))
+                               _rm(text, m, "Remove it, or ask the owner (%s) for a current version." % f["owner"])))
                 continue
             if f.get("value") is None:
                 continue
@@ -75,7 +85,7 @@ def review(text, channel="social", has_image=False, alt_text="", today=None):
             out.append(_mk("facts", "medium", m.start(), m.end(), m.group(),
                            "No approved source found for this figure, so it cannot be verified.", "V-1",
                            "Facts policy 5.1: Every number must match an approved fact.",
-                           {"type": "note", "text": "Add an approved fact for it, or remove the figure."}, confidence="medium"))
+                           _rm(text, m, "Add an approved fact for it, or remove the figure."), confidence="medium"))
 
     # 4. Tone (rule-based approximation)
     tone = BRAND["tone"]

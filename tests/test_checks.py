@@ -54,6 +54,13 @@ class CheckTests(unittest.TestCase):
     def test_brand_hashtag_not_flagged(self):
         self.assertNotIn("T-2", rules("Love it #NourishDaily"))
 
+    def test_claim_findings_offer_sentence_removal(self):
+        text = "Great taste. Guaranteed to help you lose weight. Try it."
+        fs = checks.review(text)["findings"]
+        f = [x for x in fs if x["rule_id"] == "C-2"][0]
+        self.assertEqual(f["suggestion"]["type"], "remove_sentence")
+        self.assertEqual(text[f["suggestion"]["start"]:f["suggestion"]["end"]].strip(), "Guaranteed to help you lose weight.")
+
     def test_finding_ids_are_stable(self):
         a = [f["id"] for f in checks.review(S[0]["text"])["findings"]]
         b = [f["id"] for f in checks.review(S[0]["text"])["findings"]]
