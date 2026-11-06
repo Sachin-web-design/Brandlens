@@ -12,10 +12,11 @@ explains why and cites the rule or approved source behind it, and a human makes 
 - Reviewer / Manager approve or request changes with comments. History and comments are kept.
 - Governance insights: issues by category, most frequent rules, most dismissed rules.
 - No login for judges: use the "Viewing as" role switcher (demo only, not real authentication).
+- Apply fix, Remove sentence and Fix all suggested (with Undo). Nothing is applied without a click.
+- Optional AI-assisted check (Google Gemini): adds advisory tone and claim suggestions. Each AI finding is validated (the quoted text must exist in the content), labelled "AI", cites an approved source or says "cannot verify", and never blocks submission. Without a key the rule-based review works unchanged.
 
 ## Not built yet (planned)
-LLM-based tone and claim understanding, image review, document upload, claims expiry reminders,
-guideline clarity suggestions, reviewer learning loop, real authentication.
+Image review, document upload, guideline clarity suggestions, reviewer learning loop, real authentication.
 
 ## Run locally
 ```
