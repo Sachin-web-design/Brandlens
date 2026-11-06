@@ -6,7 +6,7 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
-from . import checks, logic
+from . import ai, checks, logic
 
 ROOT = Path(__file__).resolve().parent.parent
 app = FastAPI(title="BrandLens")
@@ -17,6 +17,7 @@ class ReviewIn(BaseModel):
     channel: str = "social"
     has_image: bool = False
     alt_text: str = ""
+    use_ai: bool = True
 
 
 class SubmitIn(ReviewIn):
@@ -60,7 +61,18 @@ def brand():
 
 @app.post("/api/review")
 def review(p: ReviewIn):
-    return checks.review(p.text, p.channel, p.has_image, p.alt_text)
+    res = checks.review(p.text, p.channel, p.has_image, p.alt_text)
+    res["ai"] = {"enabled": ai.enabled(), "status": "AI-assisted check: not configured (rule-based checks only)."}
+    if ai.enabled() and not p.use_ai:
+        res["ai"]["status"] = "AI-assisted check: switched off for this review."
+    elif ai.enabled():
+        extra, status = ai.analyse(p.text, res["findings"])
+        res["ai"]["status"] = status
+        if extra:
+            merged = checks.finalize(res["findings"] + extra)
+            merged["ai"] = res["ai"]
+            return merged
+    return res
 
 
 @app.get("/api/submissions")

@@ -27,7 +27,7 @@ table{border-collapse:collapse;width:100%}td,th{border:1px solid var(--bd);paddi
 <section id="new" class="on">
  <div class="row"><input class="w" id="title" placeholder="Title, e.g. Diwali launch post"><select id="channel"><option>Instagram post</option><option>Website</option><option>Email</option><option>Influencer post</option></select><select id="sample"><option value="">Load a sample...</option></select></div>
  <textarea id="text" placeholder="Paste your content here"></textarea>
- <div class="row"><label><input type="checkbox" id="img"> Image attached</label><input class="w" id="alt" placeholder="Alt text for the image" style="flex:1"><button class="p" id="run">Run review</button></div>
+ <div class="row"><label><input type="checkbox" id="img"> Image attached</label><input class="w" id="alt" placeholder="Alt text for the image" style="flex:1"><label class="mut"><input type="checkbox" id="useai" checked> AI-assisted check</label><button class="p" id="run">Run review</button></div>
  <div id="res"></div>
 </section>
 <section id="queue"></section><section id="insights"></section><section id="kb"></section>
@@ -45,7 +45,7 @@ $('#role').onchange=()=>{const t=document.querySelector('section.on').id;if(t===
 function hl(text,fs){const sp=fs.filter(f=>f.start!=null&&f.status==='issue').sort((a,b)=>a.start-b.start);let o='',p=0;for(const f of sp){if(f.start<p)continue;o+=esc(text.slice(p,f.start))+`<mark class="${f.severity}" title="${esc(f.rule_id)}">${esc(text.slice(f.start,f.end))}</mark>`;p=f.end}return o+esc(text.slice(p))}
 function pending(){return S.findings.filter(f=>['high','medium'].includes(f.severity)&&f.status==='issue'&&!S.decisions[f.id])}
 async function run(){const text=$('#text').value;if(!text.trim()){$('#res').innerHTML='<p class="err">Please paste some content first.</p>';return}
- const r=await api('/api/review',{text,channel:$('#channel').value,has_image:$('#img').checked,alt_text:$('#alt').value});S.findings=r.findings;
+ const r=await api('/api/review',{text,channel:$('#channel').value,has_image:$('#img').checked,alt_text:$('#alt').value,use_ai:$('#useai').checked});S.findings=r.findings;S.ai=r.ai;
  const ids=new Set(r.findings.map(f=>f.id));for(const k in S.decisions)if(!ids.has(k))delete S.decisions[k];draw(r.counts)}
 function card(f,i){const d=S.decisions[f.id],s=f.suggestion;let a='';
  if(f.status==='supported')return `<div class="card"><span class="pill info">supported</span><b>${esc(f.text)}</b><div class="src">${esc(f.why)} ${esc(f.source)}</div></div>`;
@@ -54,8 +54,8 @@ function card(f,i){const d=S.decisions[f.id],s=f.suggestion;let a='';
  if(s&&s.type==='remove_sentence')a+=`<div class="mut">Suggestion: ${esc(s.text)}</div><button onclick="fix(${i})">Remove sentence</button> `;
  if(s&&s.type==='note')a+=`<div class="mut">Suggestion: ${esc(s.text)}</div>`;
  a+=d?`<div class="mut">Dismissed: ${esc(d.reason)} <button onclick="undo(${i})">Undo</button></div>`:`<select id="r${i}">${REASONS.map(x=>`<option>${x}</option>`).join('')}</select> <button onclick="dis(${i})">Dismiss</button>`;
- return `<div class="card"><span class="pill ${f.severity}">${f.severity}</span><span class="pill info">${esc(f.category)}</span><b>${esc(f.text||'(whole post)')}</b> <span class="mut">confidence: ${esc(f.confidence)}</span><div>${esc(f.why)}</div><div class="src">${esc(f.rule_id)}: ${esc(f.source)}</div>${a}</div>`}
-function draw(c){const p=pending().length;$('#res').innerHTML=`<h3>Findings <span class="mut">${c.high} high, ${c.medium} medium, ${c.low} low</span></h3>${tools()}<div class="hl">${hl($('#text').value,S.findings)}</div>${S.findings.length?S.findings.map(card).join(''):'<div class="card">No issues found.</div>'}
+ return `<div class="card"><span class="pill ${f.severity}">${f.severity}</span><span class="pill info">${esc(f.category)}</span>${f.origin==='ai'?'<span class="pill info">AI</span>':''}<b>${esc(f.text||'(whole post)')}</b> <span class="mut">confidence: ${esc(f.confidence)}</span><div>${esc(f.why)}</div><div class="src">${esc(f.rule_id)}: ${esc(f.source)}</div>${a}</div>`}
+function draw(c){const p=pending().length;$('#res').innerHTML=`<h3>Findings <span class="mut">${c.high} high, ${c.medium} medium, ${c.low} low</span></h3>${tools()}<div class="mut">${esc(S.ai?S.ai.status:'')}</div><div class="hl">${hl($('#text').value,S.findings)}</div>${S.findings.length?S.findings.map(card).join(''):'<div class="card">No issues found.</div>'}
  <div class="card"><b>Next:</b> ${p?`<span class="err">${p} high or medium finding(s) still need a fix or a dismissal reason.</span>`:'Ready to send for human review.'}<div class="row"><button class="p" ${p?'disabled':''} onclick="submitIt()">Submit for human review</button></div><div id="msg"></div></div>`}
 function applyAll(text,fs){const rm=[],ed=[];for(const f of fs){const s=f.suggestion;if(f.status!=='issue'||!s)continue;
  if(s.type==='remove_sentence')rm.push([s.start,s.end]);else if(s.type==='replace'&&f.start!=null)ed.push([f.start,f.end,s.with])}

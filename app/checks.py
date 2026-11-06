@@ -11,7 +11,7 @@ NUM = r"\d+(?:\.\d+)?\s?%|\d+\s*out\s*of\s*\d+|(?:₹|rs\.?\s?)\s?\d+|\d+(?:\.\d
 
 
 def _mk(cat, sev, start, end, text, why, rule, source, suggestion=None, confidence="high", status="issue"):
-    return {"category": cat, "severity": sev, "start": start, "end": end, "text": text, "why": why,
+    return {"origin": "rules", "category": cat, "severity": sev, "start": start, "end": end, "text": text, "why": why,
             "rule_id": rule, "source": source, "suggestion": suggestion, "confidence": confidence, "status": status}
 
 
@@ -126,6 +126,10 @@ def review(text, channel="social", has_image=False, alt_text="", today=None):
                            "Partnership mentioned without a clear disclosure.", d["rule"], d["source"],
                            {"type": "append", "text": " #ad"}))
 
+    return finalize(out)
+
+
+def finalize(out):
     out.sort(key=lambda f: (f["start"] if f["start"] is not None else 10 ** 9, SEV[f["severity"]]))
     seen = {}
     for f in out:

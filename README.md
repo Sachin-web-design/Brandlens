@@ -38,4 +38,8 @@ Note: free instances sleep after inactivity (first load can take about a minute)
 
 ## AI assistance disclosure
 Claude (Anthropic) was used to help write the starter code, tests and this README. The team reviewed, runs and maintains it.
-Libraries: FastAPI, Uvicorn, Pydantic. No external AI service is called at runtime in this version.
+Libraries: FastAPI, Uvicorn, Pydantic.
+
+## Optional Gemini setup
+Set the environment variable `GEMINI_API_KEY` (key from Google AI Studio). Optionally set `GEMINI_MODEL` if the default model name is unavailable.
+When enabled, the content of a review is sent to Google's Gemini API. Google may use free-tier data to improve its products, so use only fictional or non-confidential content with this demo. Never commit the key to the repository.
