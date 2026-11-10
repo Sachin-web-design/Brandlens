@@ -37,11 +37,12 @@ def enabled():
     return bool(os.environ.get("GEMINI_API_KEY", "").strip())
 
 
-def _call(prompt):
+def _call(prompt, json_mode=True):
     key = os.environ["GEMINI_API_KEY"].strip()
     models = [os.environ["GEMINI_MODEL"].strip()] if os.environ.get("GEMINI_MODEL", "").strip() else DEFAULT_MODELS
     body = json.dumps({"contents": [{"parts": [{"text": prompt}]}],
-                       "generationConfig": {"temperature": 0.1, "responseMimeType": "application/json"}}).encode()
+                       "generationConfig": ({"temperature": 0.1, "responseMimeType": "application/json"}
+                                            if json_mode else {"temperature": 0.2})}).encode()
     last = "no model tried"
     for model in models:
         url = "https://generativelanguage.googleapis.com/v1beta/models/%s:generateContent" % model
@@ -111,3 +112,18 @@ def analyse(text, existing):
         out.append(f)
         taken.append(f)
     return out, "AI-assisted check ran (%s): %d extra suggestion(s). AI output is advisory." % (model, len(out))
+
+
+def suggest_wording(source, reasons, examples):
+    """Optional: ask Gemini for a clearer version of a guideline. Returns '' if unavailable. Never raises."""
+    if not enabled():
+        return ""
+    prompt = ("Rewrite this brand guideline so it is clear and unambiguous. Keep its intent. Include one allowed and "
+              "one not-allowed example and say when it does not apply. Maximum 60 words. Return plain text only.\n"
+              "Guideline: %s\nCreators dismissed it for these reasons: %s\nPosts that triggered it: %s"
+              % (source, json.dumps(reasons), json.dumps(examples[:3])))
+    try:
+        raw, _ = _call(prompt, json_mode=False)
+        return raw.strip()[:600]
+    except Exception:
+        return ""

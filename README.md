@@ -14,9 +14,10 @@ explains why and cites the rule or approved source behind it, and a human makes 
 - No login for judges: use the "Viewing as" role switcher (demo only, not real authentication).
 - Apply fix, Remove sentence and Fix all suggested (with Undo). Nothing is applied without a click.
 - Optional AI-assisted check (Google Gemini): adds advisory tone and claim suggestions. Each AI finding is validated (the quoted text must exist in the content), labelled "AI", cites an approved source or says "cannot verify", and never blocks submission. Without a key the rule-based review works unchanged.
+- Guideline clarity insights and reviewer learning loop (Insights tab): finds rules that creators often dismiss or call unclear, and rules that are often broken; suggests clearer wording (optionally AI-written); a Manager can approve a severity change or accept new wording. Facts and disclosure rules are never tuned. The page includes clearly labelled seeded demo history.
 
 ## Not built yet (planned)
-Image review, document upload, guideline clarity suggestions, reviewer learning loop, real authentication.
+Image review, document upload, retrieval and a measured benchmark for the AI check, real authentication.
 
 ## Run locally
 ```

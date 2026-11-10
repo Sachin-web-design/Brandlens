@@ -6,7 +6,7 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
-from . import ai, checks, logic
+from . import ai, checks, logic, tuning
 
 ROOT = Path(__file__).resolve().parent.parent
 app = FastAPI(title="BrandLens")
@@ -33,6 +33,13 @@ class DecisionIn(BaseModel):
     comment: str = ""
 
 
+class TuneIn(BaseModel):
+    role: str
+    rule_id: str
+    action: str
+    text: str = ""
+
+
 class CommentIn(BaseModel):
     role: str
     text: str
@@ -56,7 +63,8 @@ def brand():
             "facts": [{k: f[k] for k in ("id", "label", "text", "owner", "valid_until")} for f in b["facts"]],
             "terms": [{"rule": t["rule"], "avoid": t["avoid"], "use": t["use"]} for t in b["terms"]],
             "claims": [{"rule": c["rule"], "source": c["source"]} for c in b["claim_rules"]],
-            "approved_claims": b["approved_claims"]}
+            "approved_claims": b["approved_claims"],
+            "clarified": [{"rule_id": k, "text": v["text"]} for k, v in tuning.wording().items()]}
 
 
 @app.post("/api/review")
@@ -99,6 +107,26 @@ def comments(sub_id: str, p: CommentIn):
 @app.get("/api/insights")
 def insights():
     return logic.insights()
+
+
+@app.get("/api/clarity")
+def clarity():
+    return tuning.clarity(logic.list_submissions())
+
+
+@app.post("/api/clarity/apply")
+def clarity_apply(p: TuneIn):
+    return _call(tuning.apply, logic.list_submissions(), p.role, p.rule_id, p.action, p.text)
+
+
+@app.post("/api/clarity/suggest")
+def clarity_suggest(p: TuneIn):
+    rule = next((r for r in tuning.clarity(logic.list_submissions())["rules"] if r["rule_id"] == p.rule_id), None)
+    if not rule:
+        raise HTTPException(404, "Rule not in the clarity list")
+    examples = [f["text"] for s in logic.list_submissions() for f in s["findings"] if f["rule_id"] == p.rule_id][:3]
+    text = ai.suggest_wording(rule["source"], rule["reasons"], examples)
+    return {"text": text or rule["default_wording"], "from_ai": bool(text)}
 
 
 app.mount("/static", StaticFiles(directory=str(ROOT / "static")), name="static")

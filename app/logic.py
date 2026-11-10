@@ -35,6 +35,30 @@ def _build(title, author, text, channel, has_image, alt_text, decisions, fixes, 
             "applied_fixes": fixes or [], "status": status, "created": _now(), "history": history, "comments": []}
 
 
+
+def _dismiss(text, rules, reason):
+    res = checks.review(text)
+    return {f["id"]: {"action": "dismissed", "reason": reason} for f in res["findings"] if f["rule_id"] in rules}
+
+
+def _demo_history():
+    """Seeded history so the clarity insights are not empty on a fresh deploy (clearly labelled as seeded)."""
+    hist = [{"at": _now(), "who": "creator", "action": "submitted", "comment": "Seeded demo history"},
+            {"at": _now(), "who": "reviewer", "action": "approved", "comment": ""}]
+    out = []
+    plan = [("Hey guys, try our new oat bar. Each bar has 8 g of protein.", {"T-3"}, "Guideline is unclear"),
+            ("Hey guys! Our bar is epic and costs Rs 49.", {"T-3", "TN-1"}, "Guideline is unclear"),
+            ("Thanks guys for the love. This amazing bar is made with whole oats.", {"T-3", "TN-1"}, "Guideline is unclear"),
+            ("Epic launch day at our store. #healthysnacksforyou", {"TN-1", "AC-1"}, "Not applicable here"),
+            ("Our game-changer bar has 8 g of protein!", {"TN-1"}, "Approved exception")]
+    for text, rules, reason in plan:
+        out.append(_build("Seeded demo post", "Seeded demo", text, "social", False, "", _dismiss(text, rules, reason), [],
+                          "Approved", list(hist)))
+    for _ in range(4):
+        out.append(_build("Seeded demo post", "Seeded demo", "Great oat bar. Each bar has 8 g of protein.", "social", False, "",
+                          {}, [{"rule_id": "C-1", "before": "the BEST", "after": ""}], "Approved", list(hist)))
+    return out
+
 def _load():
     if DATA_FILE.exists():
         return json.loads(DATA_FILE.read_text(encoding="utf-8"))
@@ -47,7 +71,7 @@ def _load():
                [{"at": _now(), "who": "creator", "action": "submitted", "comment": ""},
                 {"at": _now(), "who": "reviewer", "action": "changes requested",
                  "comment": "Founding year is wrong and the partnership needs #ad."}])
-    items = [a, b]
+    items = [a, b] + _demo_history()
     _save(items)
     return items
 

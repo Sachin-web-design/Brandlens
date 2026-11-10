@@ -126,6 +126,13 @@ def review(text, channel="social", has_image=False, alt_text="", today=None):
                            "Partnership mentioned without a clear disclosure.", d["rule"], d["source"],
                            {"type": "append", "text": " #ad"}))
 
+    from . import tuning  # approved severity changes from the learning loop
+    ov = tuning.overrides()
+    for f in out:
+        o = ov.get(f["rule_id"])
+        if o and f["status"] == "issue":
+            f["severity"] = o["severity"]
+            f["tuned"] = True
     return finalize(out)
 
 
