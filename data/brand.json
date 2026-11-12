@@ -150,5 +150,23 @@
    "name": "Sample 3: clean post",
    "text": "Meet the new Nourish Daily oat bar. Each bar has 8 g of protein and costs Rs 49. Made with whole oats and no added preservatives. #NourishDaily"
   }
- ]
+ ],
+ "visual": {
+  "palette": [
+   "#0F6E56",
+   "#E1F5EE",
+   "#2C2C2A",
+   "#FFFFFF",
+   "#F5F5F2",
+   "#5DCAA5"
+  ],
+  "palette_distance": 60,
+  "off_palette_limit": 0.35,
+  "min_contrast": 4.5,
+  "logo": "assets/logo.png",
+  "logo_threshold": 0.6,
+  "source_palette": "Visual guide 5.1: Use the brand palette (greens, off-white and charcoal). Avoid neon or unrelated colours.",
+  "source_logo": "Visual guide 5.2: Put the Nourish Daily logo on every branded graphic.",
+  "source_contrast": "WCAG 2.2 SC 1.4.3 (Contrast, Minimum): text needs a contrast ratio of at least 4.5:1 against its background."
+ }
 }

@@ -1,0 +1,756 @@
+{
+ "brand": "Nourish Daily (fictional)",
+ "items": [
+  {
+   "channel": "Instagram post",
+   "text": "Meet the Nourish Daily oat bar. Each bar has 8 g of protein and costs Rs 49.",
+   "has_image": false,
+   "alt_text": "",
+   "planted": [],
+   "id": "B-01",
+   "clean": true
+  },
+  {
+   "channel": "Instagram post",
+   "text": "Made with whole oats and no added preservatives. A calm, tasty start to your morning.",
+   "has_image": false,
+   "alt_text": "",
+   "planted": [],
+   "id": "B-02",
+   "clean": true
+  },
+  {
+   "channel": "Website",
+   "text": "Nourish Daily was founded in 2019 by a small team that loves simple food.",
+   "has_image": false,
+   "alt_text": "",
+   "planted": [],
+   "id": "B-03",
+   "clean": true
+  },
+  {
+   "channel": "Instagram post",
+   "text": "Each bar has 190 kcal. Pair it with fruit for a light snack. #HealthySnacks",
+   "has_image": false,
+   "alt_text": "",
+   "planted": [],
+   "id": "B-04",
+   "clean": true
+  },
+  {
+   "channel": "Instagram post",
+   "text": "Our weekend market stall is open from 10 am. Come and say hello.",
+   "has_image": false,
+   "alt_text": "",
+   "planted": [],
+   "id": "B-05",
+   "clean": true
+  },
+  {
+   "channel": "Instagram post",
+   "text": "Thank you for one year of kind messages. We read every one of them.",
+   "has_image": false,
+   "alt_text": "",
+   "planted": [],
+   "id": "B-06",
+   "clean": true
+  },
+  {
+   "channel": "Instagram post",
+   "text": "Aaj ka snack simple rakhiye. Nourish Daily oat bar, whole oats se bana.",
+   "has_image": false,
+   "alt_text": "",
+   "planted": [],
+   "id": "B-07",
+   "clean": true
+  },
+  {
+   "channel": "Influencer post",
+   "text": "Partnered with a local gym for our launch week. #ad",
+   "has_image": false,
+   "alt_text": "",
+   "planted": [],
+   "id": "B-08",
+   "clean": true
+  },
+  {
+   "channel": "Website",
+   "text": "Our oat bar is made with whole oats. Read the ingredient list on the pack for details.",
+   "has_image": false,
+   "alt_text": "",
+   "planted": [],
+   "id": "B-09",
+   "clean": true
+  },
+  {
+   "channel": "Email",
+   "text": "Hello everyone, our new flavour is coming soon. We will share the details next week.",
+   "has_image": false,
+   "alt_text": "",
+   "planted": [],
+   "id": "B-10",
+   "clean": true
+  },
+  {
+   "channel": "Email",
+   "text": "One bar costs Rs 49. Ask us about bulk orders for college events.",
+   "has_image": false,
+   "alt_text": "",
+   "planted": [],
+   "id": "B-11",
+   "clean": true
+  },
+  {
+   "channel": "Website",
+   "text": "No added preservatives. The lab report is available on request.",
+   "has_image": false,
+   "alt_text": "",
+   "planted": [],
+   "id": "B-12",
+   "clean": true
+  },
+  {
+   "channel": "Instagram post",
+   "text": "Tired of heavy breakfasts? Try a light oat bar with 8 g of protein.",
+   "has_image": false,
+   "alt_text": "",
+   "planted": [],
+   "id": "B-13",
+   "clean": true
+  },
+  {
+   "channel": "Instagram post",
+   "text": "Our team tasted six flavours before choosing this one. Tell us what you think.",
+   "has_image": false,
+   "alt_text": "",
+   "planted": [],
+   "id": "B-14",
+   "clean": true
+  },
+  {
+   "channel": "Instagram post",
+   "text": "Nourish Daily is open on Sundays too. See you at the stall.",
+   "has_image": false,
+   "alt_text": "",
+   "planted": [],
+   "id": "B-15",
+   "clean": true
+  },
+  {
+   "channel": "Instagram post",
+   "text": "Cheap and tasty oat bars for students.",
+   "has_image": false,
+   "alt_text": "",
+   "planted": [
+    {
+     "rule_ids": [
+      "T-1"
+     ],
+     "category": "terminology",
+     "quote": "Cheap",
+     "layer": "rules"
+    }
+   ],
+   "id": "B-16",
+   "clean": false
+  },
+  {
+   "channel": "Instagram post",
+   "text": "Try NourishDaily today. Each bar has 8 g of protein.",
+   "has_image": false,
+   "alt_text": "",
+   "planted": [
+    {
+     "rule_ids": [
+      "T-2"
+     ],
+     "category": "terminology",
+     "quote": "NourishDaily",
+     "layer": "rules"
+    }
+   ],
+   "id": "B-17",
+   "clean": false
+  },
+  {
+   "channel": "Instagram post",
+   "text": "Hey guys, our new oat bar is here.",
+   "has_image": false,
+   "alt_text": "",
+   "planted": [
+    {
+     "rule_ids": [
+      "T-3"
+     ],
+     "category": "terminology",
+     "quote": "guys",
+     "layer": "rules"
+    }
+   ],
+   "id": "B-18",
+   "clean": false
+  },
+  {
+   "channel": "Instagram post",
+   "text": "The best oat bar in town. Made with whole oats.",
+   "has_image": false,
+   "alt_text": "",
+   "planted": [
+    {
+     "rule_ids": [
+      "C-1"
+     ],
+     "category": "claims",
+     "quote": "best",
+     "layer": "rules"
+    }
+   ],
+   "id": "B-19",
+   "clean": false
+  },
+  {
+   "channel": "Instagram post",
+   "text": "#1 snack for students.",
+   "has_image": false,
+   "alt_text": "",
+   "planted": [
+    {
+     "rule_ids": [
+      "C-1"
+     ],
+     "category": "claims",
+     "quote": "#1",
+     "layer": "rules"
+    }
+   ],
+   "id": "B-20",
+   "clean": false
+  },
+  {
+   "channel": "Instagram post",
+   "text": "Guaranteed to keep you full. Each bar has 8 g of protein.",
+   "has_image": false,
+   "alt_text": "",
+   "planted": [
+    {
+     "rule_ids": [
+      "C-2"
+     ],
+     "category": "claims",
+     "quote": "Guaranteed",
+     "layer": "rules"
+    }
+   ],
+   "id": "B-21",
+   "clean": false
+  },
+  {
+   "channel": "Instagram post",
+   "text": "100% natural ingredients in every bar.",
+   "has_image": false,
+   "alt_text": "",
+   "planted": [
+    {
+     "rule_ids": [
+      "C-2"
+     ],
+     "category": "claims",
+     "quote": "100% natural",
+     "layer": "rules"
+    }
+   ],
+   "id": "B-22",
+   "clean": false
+  },
+  {
+   "channel": "Instagram post",
+   "text": "Risk-free trial pack this week.",
+   "has_image": false,
+   "alt_text": "",
+   "planted": [
+    {
+     "rule_ids": [
+      "C-2"
+     ],
+     "category": "claims",
+     "quote": "Risk-free",
+     "layer": "rules"
+    }
+   ],
+   "id": "B-23",
+   "clean": false
+  },
+  {
+   "channel": "Instagram post",
+   "text": "This bar helps you lose weight fast.",
+   "has_image": false,
+   "alt_text": "",
+   "planted": [
+    {
+     "rule_ids": [
+      "C-3"
+     ],
+     "category": "claims",
+     "quote": "lose weight",
+     "layer": "rules"
+    }
+   ],
+   "id": "B-24",
+   "clean": false
+  },
+  {
+   "channel": "Instagram post",
+   "text": "Clinically proven to boost your energy.",
+   "has_image": false,
+   "alt_text": "",
+   "planted": [
+    {
+     "rule_ids": [
+      "C-3"
+     ],
+     "category": "claims",
+     "quote": "Clinically proven",
+     "layer": "rules"
+    }
+   ],
+   "id": "B-25",
+   "clean": false
+  },
+  {
+   "channel": "Instagram post",
+   "text": "Each bar has 12 g of protein.",
+   "has_image": false,
+   "alt_text": "",
+   "planted": [
+    {
+     "rule_ids": [
+      "F-1"
+     ],
+     "category": "facts",
+     "quote": "12 g of protein",
+     "layer": "rules"
+    }
+   ],
+   "id": "B-26",
+   "clean": false
+  },
+  {
+   "channel": "Instagram post",
+   "text": "One bar costs Rs 59.",
+   "has_image": false,
+   "alt_text": "",
+   "planted": [
+    {
+     "rule_ids": [
+      "F-2"
+     ],
+     "category": "facts",
+     "quote": "Rs 59",
+     "layer": "rules"
+    }
+   ],
+   "id": "B-27",
+   "clean": false
+  },
+  {
+   "channel": "Instagram post",
+   "text": "Nourish Daily was founded in 2017.",
+   "has_image": false,
+   "alt_text": "",
+   "planted": [
+    {
+     "rule_ids": [
+      "F-3"
+     ],
+     "category": "facts",
+     "quote": "founded in 2017",
+     "layer": "rules"
+    }
+   ],
+   "id": "B-28",
+   "clean": false
+  },
+  {
+   "channel": "Instagram post",
+   "text": "Only 150 calories per bar.",
+   "has_image": false,
+   "alt_text": "",
+   "planted": [
+    {
+     "rule_ids": [
+      "F-5"
+     ],
+     "category": "facts",
+     "quote": "150 calories",
+     "layer": "rules"
+    }
+   ],
+   "id": "B-29",
+   "clean": false
+  },
+  {
+   "channel": "Instagram post",
+   "text": "Diwali special: flat 20% off on all bars.",
+   "has_image": false,
+   "alt_text": "",
+   "planted": [
+    {
+     "rule_ids": [
+      "F-4"
+     ],
+     "category": "facts",
+     "quote": "Diwali special",
+     "layer": "rules"
+    }
+   ],
+   "id": "B-30",
+   "clean": false
+  },
+  {
+   "channel": "Instagram post",
+   "text": "Our Diwali offer is back this week.",
+   "has_image": false,
+   "alt_text": "",
+   "planted": [
+    {
+     "rule_ids": [
+      "F-4"
+     ],
+     "category": "facts",
+     "quote": "Diwali offer",
+     "layer": "rules"
+    }
+   ],
+   "id": "B-31",
+   "clean": false
+  },
+  {
+   "channel": "Instagram post",
+   "text": "98% of customers love us.",
+   "has_image": false,
+   "alt_text": "",
+   "planted": [
+    {
+     "rule_ids": [
+      "V-1"
+     ],
+     "category": "facts",
+     "quote": "98%",
+     "layer": "rules"
+    }
+   ],
+   "id": "B-32",
+   "clean": false
+  },
+  {
+   "channel": "Instagram post",
+   "text": "4 out of 5 students prefer our bar.",
+   "has_image": false,
+   "alt_text": "",
+   "planted": [
+    {
+     "rule_ids": [
+      "V-1"
+     ],
+     "category": "facts",
+     "quote": "4 out of 5",
+     "layer": "rules"
+    }
+   ],
+   "id": "B-33",
+   "clean": false
+  },
+  {
+   "channel": "Influencer post",
+   "text": "Partnered with a fitness creator for our launch. Each bar has 8 g of protein.",
+   "has_image": false,
+   "alt_text": "",
+   "planted": [
+    {
+     "rule_ids": [
+      "D-1"
+     ],
+     "category": "disclosure",
+     "quote": "Partnered with",
+     "layer": "rules"
+    }
+   ],
+   "id": "B-34",
+   "clean": false
+  },
+  {
+   "channel": "Influencer post",
+   "text": "Gifted bars to our favourite creators this week.",
+   "has_image": false,
+   "alt_text": "",
+   "planted": [
+    {
+     "rule_ids": [
+      "D-1"
+     ],
+     "category": "disclosure",
+     "quote": "Gifted",
+     "layer": "rules"
+    }
+   ],
+   "id": "B-35",
+   "clean": false
+  },
+  {
+   "channel": "Instagram post",
+   "text": "Our new bar is here!!! Each bar has 8 g of protein.",
+   "has_image": false,
+   "alt_text": "",
+   "planted": [
+    {
+     "rule_ids": [
+      "TN-2"
+     ],
+     "category": "tone",
+     "quote": "!!!",
+     "layer": "rules"
+    }
+   ],
+   "id": "B-36",
+   "clean": false
+  },
+  {
+   "channel": "Instagram post",
+   "text": "An amazing bar for your morning.",
+   "has_image": false,
+   "alt_text": "",
+   "planted": [
+    {
+     "rule_ids": [
+      "TN-1"
+     ],
+     "category": "tone",
+     "quote": "amazing",
+     "layer": "rules"
+    }
+   ],
+   "id": "B-37",
+   "clean": false
+  },
+  {
+   "channel": "Instagram post",
+   "text": "FRESHLY baked oat bars at the stall today.",
+   "has_image": false,
+   "alt_text": "",
+   "planted": [
+    {
+     "rule_ids": [
+      "TN-3"
+     ],
+     "category": "tone",
+     "quote": "FRESHLY",
+     "layer": "rules"
+    }
+   ],
+   "id": "B-38",
+   "clean": false
+  },
+  {
+   "channel": "Instagram post",
+   "text": "Snack smart with #healthysnacksforyou today.",
+   "has_image": false,
+   "alt_text": "",
+   "planted": [
+    {
+     "rule_ids": [
+      "AC-1"
+     ],
+     "category": "accessibility",
+     "quote": "#healthysnacksforyou",
+     "layer": "rules"
+    }
+   ],
+   "id": "B-39",
+   "clean": false
+  },
+  {
+   "channel": "Instagram post",
+   "text": "We are very happy to share with all of our friends and followers that our new oat bar is now available at every campus stall this week.",
+   "has_image": false,
+   "alt_text": "",
+   "planted": [
+    {
+     "rule_ids": [
+      "AC-2"
+     ],
+     "category": "accessibility",
+     "quote": "We are very happy",
+     "layer": "rules"
+    }
+   ],
+   "id": "B-40",
+   "clean": false
+  },
+  {
+   "channel": "Instagram post",
+   "text": "Meet our new oat bar.",
+   "has_image": true,
+   "alt_text": "",
+   "planted": [
+    {
+     "rule_ids": [
+      "AC-3"
+     ],
+     "category": "accessibility",
+     "quote": "",
+     "layer": "rules"
+    }
+   ],
+   "id": "B-41",
+   "clean": false
+  },
+  {
+   "channel": "Instagram post",
+   "text": "Our stall at the college fest.",
+   "has_image": true,
+   "alt_text": "bar",
+   "planted": [
+    {
+     "rule_ids": [
+      "AC-3"
+     ],
+     "category": "accessibility",
+     "quote": "",
+     "layer": "rules"
+    }
+   ],
+   "id": "B-42",
+   "clean": false
+  },
+  {
+   "channel": "Instagram post",
+   "text": "Nothing else on the shelf even comes close to our oat bar.",
+   "has_image": false,
+   "alt_text": "",
+   "planted": [
+    {
+     "rule_ids": [],
+     "category": "claims",
+     "quote": "Nothing else on the shelf even comes close",
+     "layer": "ai"
+    }
+   ],
+   "id": "B-43",
+   "clean": false
+  },
+  {
+   "channel": "Instagram post",
+   "text": "Ekdum zabardast bar, sabse badhiya snack in town.",
+   "has_image": false,
+   "alt_text": "",
+   "planted": [
+    {
+     "rule_ids": [],
+     "category": "claims",
+     "quote": "sabse badhiya snack in town",
+     "layer": "ai"
+    }
+   ],
+   "id": "B-44",
+   "clean": false
+  },
+  {
+   "channel": "Instagram post",
+   "text": "Eat one every morning and watch the belly fat disappear.",
+   "has_image": false,
+   "alt_text": "",
+   "planted": [
+    {
+     "rule_ids": [],
+     "category": "claims",
+     "quote": "watch the belly fat disappear",
+     "layer": "ai"
+    }
+   ],
+   "id": "B-45",
+   "clean": false
+  },
+  {
+   "channel": "Instagram post",
+   "text": "Doctors recommend it to every patient.",
+   "has_image": false,
+   "alt_text": "",
+   "planted": [
+    {
+     "rule_ids": [],
+     "category": "claims",
+     "quote": "Doctors recommend it to every patient",
+     "layer": "ai"
+    }
+   ],
+   "id": "B-46",
+   "clean": false
+  },
+  {
+   "channel": "Instagram post",
+   "text": "Packed with double the protein of any other bar.",
+   "has_image": false,
+   "alt_text": "",
+   "planted": [
+    {
+     "rule_ids": [],
+     "category": "facts",
+     "quote": "double the protein of any other bar",
+     "layer": "ai"
+    }
+   ],
+   "id": "B-47",
+   "clean": false
+  },
+  {
+   "channel": "Instagram post",
+   "text": "Honestly, you will lose your mind over how good this tastes.",
+   "has_image": false,
+   "alt_text": "",
+   "planted": [
+    {
+     "rule_ids": [],
+     "category": "tone",
+     "quote": "you will lose your mind",
+     "layer": "ai"
+    }
+   ],
+   "id": "B-48",
+   "clean": false
+  },
+  {
+   "channel": "Instagram post",
+   "text": "Festival season bonanza: 20 percent off until 15 Nov 2025.",
+   "has_image": false,
+   "alt_text": "",
+   "planted": [
+    {
+     "rule_ids": [
+      "F-4"
+     ],
+     "category": "facts",
+     "quote": "20 percent off until 15 Nov 2025",
+     "layer": "ai"
+    }
+   ],
+   "id": "B-49",
+   "clean": false
+  },
+  {
+   "channel": "Instagram post",
+   "text": "Bhai, yeh bar khaoge toh pagal ho jaoge, kya mast cheez hai.",
+   "has_image": false,
+   "alt_text": "",
+   "planted": [
+    {
+     "rule_ids": [],
+     "category": "tone",
+     "quote": "pagal ho jaoge",
+     "layer": "ai"
+    }
+   ],
+   "id": "B-50",
+   "clean": false
+  }
+ ]
+}

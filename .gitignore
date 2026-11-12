@@ -4,3 +4,4 @@ venv/
 .venv/
 data/submissions.json
 .env
+data/tuning.json

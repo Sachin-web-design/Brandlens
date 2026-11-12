@@ -7,7 +7,7 @@ from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
 
-from . import checks
+from . import checks, files
 
 DATA_FILE = Path(os.environ.get("DATA_FILE", checks.ROOT / "data" / "submissions.json"))
 LOCK = threading.Lock()
@@ -23,8 +23,10 @@ def _save(items):
     DATA_FILE.write_text(json.dumps(items, ensure_ascii=False, indent=1), encoding="utf-8")
 
 
-def _build(title, author, text, channel, has_image, alt_text, decisions, fixes, status, history):
+def _build(title, author, text, channel, has_image, alt_text, decisions, fixes, status, history, extra=None):
     res = checks.review(text, channel, has_image, alt_text)
+    if extra:
+        res = checks.finalize(res["findings"] + extra)
     findings = []
     for f in res["findings"]:
         f = dict(f)
@@ -94,7 +96,10 @@ def create(p):
     if not p["title"].strip():
         raise ValueError("Please give the content a title")
     decisions = p.get("decisions") or {}
+    extra = files.cached(p.get("upload_id"))
     res = checks.review(p["text"], p["channel"], p["has_image"], p["alt_text"])
+    if extra:
+        res = checks.finalize(res["findings"] + extra)
     pending = [f for f in res["findings"] if f["severity"] in ("high", "medium")
                and (decisions.get(f["id"]) or {}).get("action") != "dismissed"]
     if pending:
@@ -104,7 +109,7 @@ def create(p):
             raise ValueError("A dismissed finding needs a reason.")
     sub = _build(p["title"].strip(), p.get("author") or "Demo creator", p["text"], p["channel"], p["has_image"],
                  p["alt_text"], decisions, p.get("applied_fixes"), "In review",
-                 [{"at": _now(), "who": "creator", "action": "submitted", "comment": ""}])
+                 [{"at": _now(), "who": "creator", "action": "submitted", "comment": ""}], extra)
     with LOCK:
         items = _load()
         items.append(sub)

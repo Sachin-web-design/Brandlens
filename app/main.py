@@ -1,12 +1,12 @@
 from pathlib import Path
 from typing import Dict, List
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
-from . import ai, checks, logic, tuning
+from . import ai, benchmark, checks, files, logic, tuning
 
 ROOT = Path(__file__).resolve().parent.parent
 app = FastAPI(title="BrandLens")
@@ -18,6 +18,7 @@ class ReviewIn(BaseModel):
     has_image: bool = False
     alt_text: str = ""
     use_ai: bool = True
+    upload_id: str = ""
 
 
 class SubmitIn(ReviewIn):
@@ -63,13 +64,16 @@ def brand():
             "facts": [{k: f[k] for k in ("id", "label", "text", "owner", "valid_until")} for f in b["facts"]],
             "terms": [{"rule": t["rule"], "avoid": t["avoid"], "use": t["use"]} for t in b["terms"]],
             "claims": [{"rule": c["rule"], "source": c["source"]} for c in b["claim_rules"]],
-            "approved_claims": b["approved_claims"],
+            "approved_claims": b["approved_claims"], "visual": b["visual"],
             "clarified": [{"rule_id": k, "text": v["text"]} for k, v in tuning.wording().items()]}
 
 
 @app.post("/api/review")
 def review(p: ReviewIn):
     res = checks.review(p.text, p.channel, p.has_image, p.alt_text)
+    extra = files.cached(p.upload_id)
+    if extra:
+        res = checks.finalize(res["findings"] + extra)
     res["ai"] = {"enabled": ai.enabled(), "status": "AI-assisted check: not configured (rule-based checks only)."}
     if ai.enabled() and not p.use_ai:
         res["ai"]["status"] = "AI-assisted check: switched off for this review."
@@ -83,6 +87,17 @@ def review(p: ReviewIn):
     return res
 
 
+@app.post("/api/upload")
+async def upload(file: UploadFile = File(...)):
+    data = await file.read(files.MAX_BYTES + 1)
+    return _call(files.process, file.filename or "upload", data)
+
+
+@app.get("/api/benchmark")
+def bench():
+    return benchmark.results()
+
+
 @app.get("/api/submissions")
 def submissions():
     return logic.list_submissions()
@@ -90,7 +105,7 @@ def submissions():
 
 @app.post("/api/submissions")
 def submit(p: SubmitIn):
-    d = p.dict() if hasattr(p, "dict") else p.model_dump()
+    d = p.model_dump() if hasattr(p, "model_dump") else p.dict()
     return _call(logic.create, d)
 
 
@@ -129,6 +144,8 @@ def clarity_suggest(p: TuneIn):
     return {"text": text or rule["default_wording"], "from_ai": bool(text)}
 
 
+app.mount("/samples", StaticFiles(directory=str(ROOT / "data" / "samples")), name="samples")
+app.mount("/assets", StaticFiles(directory=str(ROOT / "data" / "assets")), name="assets")
 app.mount("/static", StaticFiles(directory=str(ROOT / "static")), name="static")
 
 

@@ -1,0 +1,102 @@
+{
+ "rules": {
+  "items": 50,
+  "clean_items": 15,
+  "planted_issues": 35,
+  "caught": 27,
+  "recall_pct": 77.1,
+  "recall_rule_targeted_pct": 100.0,
+  "recall_ai_targeted_pct": 0.0,
+  "by_category": {
+   "accessibility": {
+    "caught": 4,
+    "total": 4,
+    "pct": 100.0
+   },
+   "claims": {
+    "caught": 7,
+    "total": 11,
+    "pct": 63.6
+   },
+   "disclosure": {
+    "caught": 2,
+    "total": 2,
+    "pct": 100.0
+   },
+   "facts": {
+    "caught": 8,
+    "total": 10,
+    "pct": 80.0
+   },
+   "terminology": {
+    "caught": 3,
+    "total": 3,
+    "pct": 100.0
+   },
+   "tone": {
+    "caught": 3,
+    "total": 5,
+    "pct": 60.0
+   }
+  },
+  "false_alarm_items_high_medium": 0,
+  "false_alarm_rate_pct": 0.0,
+  "false_alarm_items_any": 0,
+  "false_alarm_any_pct": 0.0,
+  "findings": 29,
+  "with_valid_citation_pct": 100.0,
+  "cannot_verify_pct": 10.3,
+  "missed": [
+   {
+    "id": "B-43",
+    "category": "claims",
+    "layer": "ai",
+    "text": "Nothing else on the shelf even comes close to our oat bar."
+   },
+   {
+    "id": "B-44",
+    "category": "claims",
+    "layer": "ai",
+    "text": "Ekdum zabardast bar, sabse badhiya snack in town."
+   },
+   {
+    "id": "B-45",
+    "category": "claims",
+    "layer": "ai",
+    "text": "Eat one every morning and watch the belly fat disappear."
+   },
+   {
+    "id": "B-46",
+    "category": "claims",
+    "layer": "ai",
+    "text": "Doctors recommend it to every patient."
+   },
+   {
+    "id": "B-47",
+    "category": "facts",
+    "layer": "ai",
+    "text": "Packed with double the protein of any other bar."
+   },
+   {
+    "id": "B-48",
+    "category": "tone",
+    "layer": "ai",
+    "text": "Honestly, you will lose your mind over how good this tastes."
+   },
+   {
+    "id": "B-49",
+    "category": "facts",
+    "layer": "ai",
+    "text": "Festival season bonanza: 20 percent off until 15 Nov 2025."
+   },
+   {
+    "id": "B-50",
+    "category": "tone",
+    "layer": "ai",
+    "text": "Bhai, yeh bar khaoge toh pagal ho jaoge, kya mast cheez hai."
+   }
+  ],
+  "false_alarms": []
+ },
+ "generated": "2026-11-12T03:02:34+00:00"
+}
