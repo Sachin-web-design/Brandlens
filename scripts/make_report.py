@@ -88,7 +88,7 @@ def build(out):
                      "First version committed 10 Nov 19:13 IST, before the Round 3 window opened (see section 9). Uses seeded demo history on a fresh deploy, labelled as seeded."]],
                    [8, 38, 78, 56]),
              P("3. Round 2 problems fixed", H2)]
-    story += bullets(["A failed, slow or sleeping server used to leave a blank screen. Every request now has a 90 second timeout and shows a plain error message; the review shows a 'waking up' note.",
+    story += bullets(["The interface was redesigned: sidebar navigation, summary cards, clearer finding cards with severity colours, a review queue table, light and dark themes, and a layout that works on narrow screens.", "A failed, slow or sleeping server used to leave a blank screen. Every request now has a 90 second timeout and shows a plain error message; the review shows a 'waking up' note.",
                       "The Submit button was greyed out with no explanation. It now lists exactly which findings are still open and how to resolve them, and checks the title and text before sending.",
                       "Findings from an uploaded file are stored on the server and applied again at submission (keyed by upload ID). This is demo-level protection, not tamper-proof.",
                       "Deprecated Pydantic call replaced; runtime data files (submissions, tuning) are git-ignored."])

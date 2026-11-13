@@ -3,37 +3,94 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>BrandLens</title>
 <style>
-:root{--bg:#fff;--fg:#2c2c2a;--mut:#5f5e5a;--card:#f5f5f2;--bd:#d3d1c7;--g:#0f6e56;--gl:#e1f5ee;--hi:#fbd5d5;--me:#ffe9b3;--lo:#dbe7ff;--ok:#d4f0df}
-@media(prefers-color-scheme:dark){:root{--bg:#1b1b19;--fg:#ececea;--mut:#a8a69e;--card:#262624;--bd:#3d3d3a;--g:#5dcaa5;--gl:#0f3d30;--hi:#6b2323;--me:#6b5110;--lo:#23396b;--ok:#17492c}}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
-header{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 16px;border-bottom:1px solid var(--bd)}
-h1{margin:0;font-size:22px;color:var(--g)}header .sp{flex:1}.banner{background:var(--gl);padding:8px 16px;font-size:13px}
-nav{display:flex;gap:6px;padding:10px 16px;flex-wrap:wrap}nav button.on{background:var(--g);color:var(--bg);border-color:var(--g)}
-main{max-width:980px;margin:0 auto;padding:0 16px 40px}section{display:none}section.on{display:block}
-button,select,input,textarea{font:inherit;color:var(--fg);background:var(--card);border:1px solid var(--bd);border-radius:8px;padding:6px 10px}
-button{cursor:pointer}button.p{background:var(--g);color:var(--bg);border-color:var(--g);font-weight:600}
-textarea{width:100%;min-height:110px}input.w{width:100%}.row{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0;align-items:center}
-.card{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:10px 12px;margin:8px 0}
-.pill{font-size:12px;padding:1px 8px;border-radius:99px;margin-right:6px}.high{background:var(--hi)}.medium{background:var(--me)}.low{background:var(--lo)}.info{background:var(--ok)}
-mark{color:inherit;border-radius:3px;padding:0 2px}.mut{color:var(--mut);font-size:13px}.src{font-size:13px;border-left:3px solid var(--g);padding-left:8px;margin:4px 0}
-.bar{height:10px;background:var(--g);border-radius:5px}.hl{white-space:pre-wrap;background:var(--card);border:1px solid var(--bd);border-radius:8px;padding:10px}
-table{border-collapse:collapse;width:100%}td,th{border:1px solid var(--bd);padding:4px 8px;text-align:left;font-size:13px}.err{color:#c0392b}.sw{display:inline-block;width:22px;height:22px;border-radius:5px;border:1px solid var(--bd);vertical-align:middle;margin-right:4px}.warn{background:var(--me);border-radius:8px;padding:6px 10px;font-size:13px;margin:6px 0}.ok{color:var(--g)}ul.n{margin:4px 0 4px 18px;padding:0;font-size:13px}
+:root{--bg:#eceef6;--sf:#fff;--fld:#f6f6fb;--ink:#1c1b33;--mut:#6b6e86;--bd:#ebeaf4;--p:#6c5ce7;--p2:#5848d6;--ps:#efecff;--cy:#22d3ee;--hi:#fde8ec;--hit:#c0334f;--me:#fff1d8;--met:#a96a0a;--lo:#e4ecff;--lot:#3556c8;--ok:#e2f7ea;--okt:#1c8a52;--err:#d64560;--sh:0 8px 28px rgba(76,64,160,.08);--r:18px}
+@media(prefers-color-scheme:dark){:root{--bg:#10101a;--sf:#1a1a2a;--fld:#202034;--ink:#ececf8;--mut:#9a9db8;--bd:#2b2b40;--p:#8b7dff;--p2:#7a6bf5;--ps:#2a2748;--hi:#4a1f2b;--hit:#ff9db3;--me:#4a3a14;--met:#ffd27a;--lo:#1f2c52;--lot:#a9c0ff;--ok:#16402b;--okt:#7be0aa;--err:#ff8ea4;--sh:0 8px 28px rgba(0,0,0,.35)}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14.5px/1.5 Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+.app{display:grid;grid-template-columns:248px minmax(0,1fr);gap:20px;padding:20px;min-height:100vh;max-width:1600px;margin:0 auto}
+.side{background:var(--sf);border-radius:24px;box-shadow:var(--sh);padding:20px 14px;display:flex;flex-direction:column;position:sticky;top:20px;height:calc(100vh - 40px)}
+.logo{display:flex;align-items:center;gap:10px;padding:2px 8px 20px}
+.mark{width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,var(--p),var(--cy));color:#fff;display:grid;place-items:center;font-weight:700;font-size:17px}
+.side nav{display:flex;flex-direction:column;gap:4px}
+.side nav button{display:flex;align-items:center;gap:12px;width:100%;text-align:left;border:0;background:transparent;color:var(--mut);padding:11px 14px;border-radius:12px;font-weight:500;position:relative}
+.side nav button:hover{background:var(--fld);color:var(--ink)}
+.side nav button.on{background:var(--ps);color:var(--p);font-weight:600}
+.side nav button.on::before{content:"";position:absolute;left:-14px;top:8px;bottom:8px;width:4px;border-radius:4px;background:var(--p)}
+.demo{margin-top:auto;background:var(--ps);border-radius:14px;padding:12px 14px;font-size:12.5px;color:var(--mut)}.demo b{color:var(--ink)}
+.top{display:flex;align-items:center;gap:14px;padding:4px 4px 16px;flex-wrap:wrap}.sp{flex:1}
+.crumb{font-size:12px;color:var(--mut)}h1{margin:2px 0 0;font-size:26px;letter-spacing:-.4px;white-space:nowrap}
+.user{display:flex;align-items:center;gap:8px;background:var(--sf);border-radius:99px;padding:5px 8px 5px 5px;box-shadow:var(--sh)}
+.av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--p),var(--cy));color:#fff;display:grid;place-items:center;font-weight:700;font-size:13px}
+.user .mut{white-space:nowrap}.acts{margin:8px 0 0}.acts>*{margin:0}.user select{border:0;background:transparent;padding:4px 2px;font-weight:600;border-radius:8px}
+section{display:none}section.on{display:block}
+.cols{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:20px;align-items:start}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-bottom:20px}
+.kpi{background:var(--sf);border-radius:var(--r);box-shadow:var(--sh);padding:18px 18px 14px;position:relative;overflow:hidden}
+.kpi::before{content:"";position:absolute;left:0;right:0;top:0;height:4px;background:linear-gradient(90deg,var(--p),var(--cy))}
+.kpi .l{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--mut)}.kpi .v{font-size:30px;font-weight:650;letter-spacing:-.5px;margin-top:2px}.kpi .s{font-size:12px;color:var(--mut)}
+.card{background:var(--sf);border-radius:var(--r);box-shadow:var(--sh);padding:18px 20px;margin:0 0 16px}
+.card h4{margin:0 0 6px;font-size:15px}section>h3,.card h3{font-size:16px;margin:0 0 8px}section>h3{color:var(--mut);font-weight:500;font-size:14px}
+.card.f{padding:14px 16px;border-left:4px solid var(--bd)}.f-high{border-left-color:#e5546f}.f-medium{border-left-color:#f0a53a}.f-low{border-left-color:#5b84f0}.f-info,.f-ok{border-left-color:#3bb27a}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:10px 0}
+input,select,textarea{font:inherit;color:var(--ink);background:var(--fld);border:1px solid var(--bd);border-radius:12px;padding:9px 12px;max-width:100%}
+input.w{width:100%;flex:1;min-width:180px}textarea{width:100%;min-height:140px;resize:vertical}
+input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible,.drop:focus-within{outline:2px solid var(--p);outline-offset:2px}
+input[type=checkbox]{width:16px;height:16px;padding:0;accent-color:var(--p)}
+button{font:inherit;cursor:pointer;color:var(--ink);background:var(--sf);border:1px solid var(--bd);border-radius:12px;padding:8px 14px;transition:border-color .15s,color .15s}
+button:hover{border-color:var(--p);color:var(--p)}
+button.p{background:linear-gradient(135deg,var(--p),var(--p2));color:#fff;border:0;font-weight:600;box-shadow:0 6px 16px rgba(108,92,231,.32)}button.p:hover{color:#fff;filter:brightness(1.06)}
+button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
+.chip{display:block;width:100%;text-align:left;margin:6px 0;border-radius:99px;background:var(--fld);font-size:13px}
+.pill{display:inline-block;font-size:11.5px;font-weight:600;padding:2px 10px;border-radius:99px;margin-right:6px;background:var(--ps);color:var(--p)}
+.pill.high{background:var(--hi);color:var(--hit)}.pill.medium{background:var(--me);color:var(--met)}.pill.low{background:var(--lo);color:var(--lot)}.pill.info{background:var(--ok);color:var(--okt)}
+mark{color:inherit;border-radius:4px;padding:1px 3px}mark.high{background:var(--hi)}mark.medium{background:var(--me)}mark.low{background:var(--lo)}
+.mut{color:var(--mut);font-size:13px}.src{font-size:12.5px;border-left:3px solid var(--p);padding-left:10px;margin:6px 0;color:var(--mut)}
+.hl{white-space:pre-wrap;background:var(--fld);border-radius:12px;padding:14px;line-height:1.7;margin:10px 0}
+.bar{height:10px;border-radius:6px;background:linear-gradient(90deg,var(--p),var(--cy))}
+table{border-collapse:collapse;width:100%}th{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--mut);text-align:left;padding:8px 10px;border-bottom:1px solid var(--bd)}td{padding:11px 10px;border-bottom:1px solid var(--bd);font-size:13.5px;vertical-align:top}
+.tbl tr:hover td{background:var(--fld)}
+.drop{display:flex;gap:12px;align-items:center;border:1.5px dashed var(--bd);border-radius:14px;padding:12px 16px;cursor:pointer;background:var(--fld);flex:1;min-width:240px}.drop:hover{border-color:var(--p)}.drop input{position:absolute;opacity:0;width:1px;height:1px}
+.drop svg{color:var(--p);flex:none}
+.aic{background:linear-gradient(160deg,#6c5ce7,#5645d6);color:#fff;border-radius:var(--r);padding:16px 18px;margin-bottom:16px;box-shadow:var(--sh)}.aic .mut{color:#e2deff}.aic label{display:flex;gap:8px;align-items:center;font-weight:600}
+.rail ul{margin:6px 0 0;padding:0;list-style:none}.rail li{display:flex;gap:10px;align-items:center;padding:5px 0;font-size:13.5px}.rail li i{width:8px;height:8px;border-radius:50%;background:var(--p);flex:none}
+.rail li.n b{width:22px;height:22px;border-radius:50%;background:var(--ps);color:var(--p);display:grid;place-items:center;font-size:12px;flex:none}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 16px}
+.sw{display:inline-block;width:22px;height:22px;border-radius:6px;border:1px solid var(--bd);vertical-align:middle;margin-right:4px}
+.err{color:var(--err)}.ok{color:var(--okt);font-weight:600}.warn{background:var(--me);border-radius:10px;padding:8px 12px;font-size:13px;margin:6px 0}ul.n{margin:6px 0 6px 18px;padding:0;font-size:13px}
+@media(max-width:1180px){.cols{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:860px){.app{grid-template-columns:1fr;padding:12px;gap:12px}.side{position:static;height:auto;flex-direction:row;flex-wrap:wrap;align-items:center;padding:12px;border-radius:18px}.logo{padding:0 8px}.side nav{flex-direction:row;overflow-x:auto;flex:1}.side nav button{white-space:nowrap;width:auto;padding:9px 12px}.side nav button.on::before{display:none}.demo{display:none}.grid2{grid-template-columns:1fr}h1{font-size:22px}}
 </style></head><body>
-<header><h1>BrandLens</h1><span class="mut" id="brand"></span><span class="sp"></span>
-<label>Viewing as <select id="role"><option value="creator">Creator</option><option value="reviewer">Reviewer</option><option value="manager">Manager</option></select></label></header>
-<div class="banner">Demo mode: no login needed. Switch the role above. AI only suggests; a human always makes the final decision.</div>
-<nav id="tabs"><button data-t="new" class="on">1. Review content</button><button data-t="queue">2. Review queue</button><button data-t="insights">3. Insights</button><button data-t="bench">Benchmark</button><button data-t="kb">Brand knowledge</button></nav>
+<div class="app">
+<aside class="side">
+ <div class="logo"><span class="mark">B</span><div><b>BrandLens</b><div class="mut" id="brand" style="font-size:11.5px"></div></div></div>
+ <nav id="tabs"><button data-t="new" class="on"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg>Review content</button><button data-t="queue"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>Review queue</button><button data-t="insights"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>Insights</button><button data-t="bench"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>Benchmark</button><button data-t="kb"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 016.5 17H20M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>Brand knowledge</button></nav>
+ <div class="demo"><b>Demo mode</b><br>No login needed. Switch the role at the top right. AI only suggests; a human always makes the final decision.</div>
+</aside>
+<div class="content">
+<header class="top"><div><div class="crumb">Home &rsaquo; <span id="crumb">Review content</span></div><h1 id="ptitle">Review content</h1></div><span class="sp"></span>
+ <div class="user"><span class="av" id="av">C</span><span class="mut">Viewing as</span><select id="role" aria-label="Viewing as"><option value="creator">Creator</option><option value="reviewer">Reviewer</option><option value="manager">Manager</option></select></div></header>
 <main>
 <section id="new" class="on">
- <div class="row"><input class="w" id="title" placeholder="Title, e.g. Diwali launch post"><select id="channel"><option>Instagram post</option><option>Website</option><option>Email</option><option>Influencer post</option></select><select id="sample"><option value="">Load a sample...</option></select></div>
- <textarea id="text" placeholder="Paste your content here, or upload an image, DOCX or PDF below"></textarea>
- <div class="row"><label>Upload a file: <input type="file" id="file" accept=".png,.jpg,.jpeg,.webp,.gif,.docx,.pdf"></label><button id="rmfile" style="display:none">Remove file</button><span class="mut">Or try a sample file:</span><button class="sf" data-f="ok_post.png">On-brand image</button><button class="sf" data-f="bad_post.png">Off-brand image</button><button class="sf" data-f="launch_brief.docx">DOCX brief</button><button class="sf" data-f="campus_flyer.pdf">PDF flyer</button></div>
- <div id="fileinfo"></div>
- <div class="row"><label><input type="checkbox" id="img"> Image attached</label><input class="w" id="alt" placeholder="Alt text for the image" style="flex:1"><label class="mut"><input type="checkbox" id="useai" checked> AI-assisted check</label><button class="p" id="run">Run review</button></div>
- <div id="res"></div>
+ <div class="kpis"><div class="kpi"><div class="l">High</div><div class="v" id="k_h">&ndash;</div><div class="s">fix or dismiss first</div></div><div class="kpi"><div class="l">Medium</div><div class="v" id="k_m">&ndash;</div><div class="s">fix or dismiss first</div></div><div class="kpi"><div class="l">Low</div><div class="v" id="k_l">&ndash;</div><div class="s">advice, never blocks</div></div><div class="kpi"><div class="l">Open to resolve</div><div class="v" id="k_p">&ndash;</div><div class="s">before you can submit</div></div></div>
+ <div class="cols"><div>
+  <div class="card"><h4>New review</h4><div class="mut">Paste text, or upload an image, DOCX or PDF.</div>
+   <div class="row"><input class="w" id="title" placeholder="Title, e.g. Diwali launch post"><select id="channel"><option>Instagram post</option><option>Website</option><option>Email</option><option>Influencer post</option></select><select id="sample"><option value="">Load a sample...</option></select></div>
+   <textarea id="text" placeholder="Paste your content here, or upload an image, DOCX or PDF below"></textarea>
+   <div class="row"><label class="drop" style="position:relative"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg><span><b>Upload a file</b><br><span class="mut">PNG, JPG, WEBP, GIF, DOCX or PDF, up to 5 MB</span></span><input type="file" id="file" accept=".png,.jpg,.jpeg,.webp,.gif,.docx,.pdf"></label><button id="rmfile" style="display:none">Remove file</button></div>
+   <div id="fileinfo"></div>
+   <div class="row"><label><input type="checkbox" id="img"> Image attached</label><input class="w" id="alt" placeholder="Alt text for the image"><button class="p" id="run">Run review</button></div>
+  </div>
+  <div id="res"></div>
+ </div>
+ <aside class="rail">
+  <div class="aic"><label><input type="checkbox" id="useai" checked> AI-assisted check</label><div class="mut" style="margin-top:6px">Uses Gemini when a key is set. Every AI finding cites an approved source or says cannot verify, and it never blocks submission.</div></div>
+  <div class="card"><h4>Try a sample file</h4><button class="sf chip" data-f="ok_post.png">On-brand image</button><button class="sf chip" data-f="bad_post.png">Off-brand image</button><button class="sf chip" data-f="launch_brief.docx">DOCX brief</button><button class="sf chip" data-f="campus_flyer.pdf">PDF flyer</button></div>
+  <div class="card"><h4>What gets checked</h4><ul><li><i></i>Terminology</li><li><i></i>Promotional claims</li><li><i></i>Facts, with expiry dates</li><li><i></i>Tone</li><li><i></i>Accessibility</li><li><i></i>Partnership disclosure</li><li><i></i>Image palette, contrast, logo</li></ul></div>
+  <div class="card"><h4>How it works</h4><ul><li class="n"><b>1</b>Add content</li><li class="n"><b>2</b>Run review</li><li class="n"><b>3</b>Fix or dismiss findings</li><li class="n"><b>4</b>Submit for human review</li></ul></div>
+ </aside></div>
 </section>
 <section id="queue"></section><section id="insights"></section><section id="bench"></section><section id="kb"></section>
-</main>
+</main></div></div>
 <script>
 const $=s=>document.querySelector(s);
 const esc=t=>String(t==null?'':t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -45,9 +102,10 @@ async function api(p,b,form){const ac=new AbortController(),tm=setTimeout(()=>ac
  finally{clearTimeout(tm)}
  const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(typeof j.detail==='string'?j.detail:'Request failed ('+r.status+')');return j}
 const role=()=>$('#role').value;
-function tab(t){document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));document.querySelectorAll('section').forEach(s=>s.classList.toggle('on',s.id===t));if(t==='queue')loadQueue();if(t==='insights')loadInsights();if(t==='bench')loadBench();if(t==='kb')loadKb()}
+const TT={new:'Review content',queue:'Review queue',insights:'Governance insights',bench:'Benchmark',kb:'Brand knowledge'};
+function tab(t){$('#crumb').textContent=TT[t];$('#ptitle').textContent=TT[t];document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));document.querySelectorAll('section').forEach(s=>s.classList.toggle('on',s.id===t));if(t==='queue')loadQueue();if(t==='insights')loadInsights();if(t==='bench')loadBench();if(t==='kb')loadKb()}
 document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>tab(b.dataset.t));
-$('#role').onchange=()=>{const t=document.querySelector('section.on').id;if(t==='queue')loadQueue()};
+$('#role').onchange=()=>{$('#av').textContent=role()[0].toUpperCase();const t=document.querySelector('section.on').id;if(t==='queue')loadQueue()};
 function hl(text,fs){const sp=fs.filter(f=>f.start!=null&&f.status==='issue').sort((a,b)=>a.start-b.start);let o='',p=0;for(const f of sp){if(f.start<p)continue;o+=esc(text.slice(p,f.start))+`<mark class="${f.severity}" title="${esc(f.rule_id)}">${esc(text.slice(f.start,f.end))}</mark>`;p=f.end}return o+esc(text.slice(p))}
 function pending(){return S.findings.filter(f=>['high','medium'].includes(f.severity)&&f.status==='issue'&&!S.decisions[f.id])}
 async function run(){const text=$('#text').value;if(!text.trim()&&!S.upload){$('#res').innerHTML='<p class="err">Please paste some content or upload a file first.</p>';return}
@@ -56,14 +114,15 @@ async function run(){const text=$('#text').value;if(!text.trim()&&!S.upload){$('
  const ids=new Set(r.findings.map(f=>f.id));for(const k in S.decisions)if(!ids.has(k))delete S.decisions[k];draw(r.counts)}
  catch(e){$('#res').innerHTML=`<p class="err">${esc(e.message)}</p>`}finally{$('#run').disabled=false}}
 function card(f,i){const d=S.decisions[f.id],s=f.suggestion;let a='';
- if(f.status==='supported')return `<div class="card"><span class="pill info">supported</span><b>${esc(f.text)}</b><div class="src">${esc(f.why)} ${esc(f.source)}</div></div>`;
+ if(f.status==='supported')return `<div class="card f f-ok"><span class="pill info">supported</span><b>${esc(f.text)}</b><div class="src">${esc(f.why)} ${esc(f.source)}</div></div>`;
  if(s&&s.type==='replace')a+=`<button onclick="fix(${i})">Apply fix: ${esc(s.with)}</button> `;
  if(s&&s.type==='append')a+=`<button onclick="fix(${i})">Apply fix: add${esc(s.text)}</button> `;
  if(s&&s.type==='remove_sentence')a+=`<div class="mut">Suggestion: ${esc(s.text)}</div><button onclick="fix(${i})">Remove sentence</button> `;
  if(s&&s.type==='note')a+=`<div class="mut">Suggestion: ${esc(s.text)}</div>`;
  a+=d?`<div class="mut">Dismissed: ${esc(d.reason)} <button onclick="undo(${i})">Undo</button></div>`:`<select id="r${i}">${REASONS.map(x=>`<option>${x}</option>`).join('')}</select> <button onclick="dis(${i})">Dismiss</button>`;
- return `<div class="card"><span class="pill ${f.severity}">${f.severity}</span><span class="pill info">${esc(f.category)}</span>${f.origin==='ai'?'<span class="pill info">AI</span>':''}${f.origin==='file'?'<span class="pill info">from file</span>':''}${f.verdict==='cannot_verify'?'<span class="pill medium">cannot verify</span>':''}${f.tuned?'<span class="pill medium">severity tuned by Manager</span>':''}<b>${esc(f.text||'(whole post)')}</b> <span class="mut">confidence: ${esc(f.confidence)}</span><div>${esc(f.why)}</div><div class="src">${esc(f.rule_id)}: ${esc(f.source)}</div>${f.origin==='ai'?`<div class="mut">Evidence cited: ${esc(f.cited_source_id||'none (cannot verify)')}. Approved passages retrieved: ${esc((f.retrieved||[]).join(', '))}</div>`:''}${a}</div>`}
-function draw(c){const p=pending().length;$('#res').innerHTML=`<h3>Findings <span class="mut">${c.high} high, ${c.medium} medium, ${c.low} low</span></h3>${tools()}<div class="mut">${esc(S.ai?S.ai.status:'')}</div><div class="hl">${hl($('#text').value,S.findings)}</div>${S.findings.length?S.findings.map(card).join(''):'<div class="card">No issues found.</div>'}
+ return `<div class="card f f-${f.severity}"><span class="pill ${f.severity}">${f.severity}</span><span class="pill info">${esc(f.category)}</span>${f.origin==='ai'?'<span class="pill info">AI</span>':''}${f.origin==='file'?'<span class="pill info">from file</span>':''}${f.verdict==='cannot_verify'?'<span class="pill medium">cannot verify</span>':''}${f.tuned?'<span class="pill medium">severity tuned by Manager</span>':''}<b>${esc(f.text||'(whole post)')}</b> <span class="mut">confidence: ${esc(f.confidence)}</span><div>${esc(f.why)}</div><div class="src">${esc(f.rule_id)}: ${esc(f.source)}</div>${f.origin==='ai'?`<div class="mut">Evidence cited: ${esc(f.cited_source_id||'none (cannot verify)')}. Approved passages retrieved: ${esc((f.retrieved||[]).join(', '))}</div>`:''}<div class="row acts">${a}</div></div>`}
+function kpi(c,p){$('#k_h').textContent=c.high;$('#k_m').textContent=c.medium;$('#k_l').textContent=c.low;$('#k_p').textContent=p}
+function draw(c){const p=pending().length;kpi(c,p);$('#res').innerHTML=`<div class="card"><h4>Findings <span class="mut">${c.high} high, ${c.medium} medium, ${c.low} low</span></h4>${tools()}<div class="mut">${esc(S.ai?S.ai.status:'')}</div><div class="hl">${hl($('#text').value,S.findings)}</div></div>${S.findings.length?S.findings.map(card).join(''):'<div class="card">No issues found.</div>'}
  <div class="card"><b>Next:</b> ${p?`<span class="err">The Submit button is locked until ${p} high or medium finding(s) are fixed or dismissed with a reason.</span><ul class="n">${pending().map(f=>`<li>${esc(f.severity)}: ${esc(f.rule_id)} ${esc(f.text||'(whole post)')}</li>`).join('')}</ul><div class="mut">Use Apply fix, Fix all suggested, or choose a reason and press Dismiss on each card above.</div>`:'<span class="ok">Ready to send for human review.</span>'}<div class="row"><button class="p" ${p?'disabled':''} onclick="submitIt()">Submit for human review</button></div><div id="msg"></div></div>`}
 function applyAll(text,fs){const rm=[],ed=[];for(const f of fs){const s=f.suggestion;if(f.status!=='issue'||!s)continue;
  if(s.type==='remove_sentence')rm.push([s.start,s.end]);else if(s.type==='replace'&&f.start!=null)ed.push([f.start,f.end,s.with])}
@@ -90,7 +149,7 @@ async function submitIt(){if(!$('#title').value.trim()){$('#msg').innerHTML='<p 
  try{$('#msg').innerHTML='<p class="mut">Submitting...</p>';const s=await api('/api/submissions',{title:$('#title').value,author:'Demo creator',text:$('#text').value,channel:$('#channel').value,has_image:$('#img').checked,alt_text:$('#alt').value,upload_id:S.upload||'',decisions:S.decisions,applied_fixes:S.fixes});
  S.decisions={};S.fixes=[];S.open=s.id;clearFile();tab('queue')}catch(e){$('#msg').innerHTML=`<p class="err">${esc(e.message)}</p>`}}
 async function loadQueue(){const items=await api('/api/submissions');const el=$('#queue');
- let h='<h3>Review queue</h3>'+items.map(s=>`<div class="card"><b>${esc(s.title)}</b> <span class="pill ${s.status==='Approved'?'info':s.status==='In review'?'medium':'high'}">${esc(s.status)}</span> <span class="mut">${esc(s.author)}, ${esc(s.channel)}</span> <button onclick="openSub('${s.id}')">Open</button></div>`).join('');
+ let h=`<div class="card"><h4>Review queue</h4><div class="mut">Everything submitted for human review.</div>${items.length?`<table class="tbl"><tr><th>Title</th><th>Channel</th><th>Author</th><th>Status</th><th></th></tr>${items.map(s=>`<tr><td><b>${esc(s.title)}</b></td><td>${esc(s.channel)}</td><td>${esc(s.author)}</td><td><span class="pill ${s.status==='Approved'?'info':s.status==='In review'?'medium':'high'}">${esc(s.status)}</span></td><td><button onclick="openSub('${s.id}')">Open</button></td></tr>`).join('')}</table>`:'<p class="mut">Nothing submitted yet.</p>'}</div>`;
  const s=items.find(x=>x.id===S.open);if(s)h+=detail(s);el.innerHTML=h}
 function openSub(id){S.open=id;loadQueue()}
 function detail(s){const can=role()!=='creator'&&s.status==='In review';
@@ -105,9 +164,9 @@ async function decide(id,a){try{await api(`/api/submissions/${id}/decision`,{rol
 async function comment(id){const t=$('#cm').value;if(!t.trim())return;await api(`/api/submissions/${id}/comments`,{role:role(),text:t});loadQueue()}
 async function loadInsights(){const d=await api('/api/insights');const cl=await clarityHtml();const mx=Math.max(1,...Object.values(d.by_category));
  const rows=o=>Object.entries(o).map(([k,v])=>`<div class="row"><span style="width:120px">${esc(k)}</span><div class="bar" style="width:${Math.round(v/mx*260)+10}px"></div> ${v}</div>`).join('')||'<div class="mut">No data yet.</div>';
- $('#insights').innerHTML=`<h3>Governance insights</h3><div class="card"><b>${d.total}</b> submissions: ${Object.entries(d.statuses).map(([k,v])=>esc(k)+' '+v).join(', ')}. Suggested fixes applied: ${d.fixes_applied}.</div>
- <div class="card"><h4>Issues by category</h4>${rows(d.by_category)}</div><div class="card"><h4>Most frequent rules</h4>${d.top_rules.map(r=>`<div>${esc(r[0])}: ${r[1]}</div>`).join('')||'<div class="mut">No data yet.</div>'}</div>
- <div class="card"><h4>Most dismissed rules</h4><div class="mut">Rules creators often dismiss may be unclear or too strict.</div>${d.dismissed_rules.map(r=>`<div>${esc(r[0])}: dismissed ${r[1]} time(s)</div>`).join('')||'<div class="mut">No dismissals yet.</div>'}</div>`+cl}
+ const st=d.statuses||{};$('#insights').innerHTML=`<div class="kpis"><div class="kpi"><div class="l">Submissions</div><div class="v">${d.total}</div><div class="s">sent for human review</div></div><div class="kpi"><div class="l">Approved</div><div class="v">${st['Approved']||0}</div><div class="s">locked and ready</div></div><div class="kpi"><div class="l">In review</div><div class="v">${st['In review']||0}</div><div class="s">waiting for a decision</div></div><div class="kpi"><div class="l">Fixes applied</div><div class="v">${d.fixes_applied}</div><div class="s">suggestions accepted</div></div></div>
+ <div class="grid2"><div class="card"><h4>Issues by category</h4>${rows(d.by_category)}</div><div class="card"><h4>Most frequent rules</h4>${d.top_rules.map(r=>`<div class="row" style="margin:4px 0"><span class="pill">${esc(r[0])}</span><span class="mut">${r[1]} findings</span></div>`).join('')||'<div class="mut">No data yet.</div>'}</div></div>
+ <div class="card"><h4>Most dismissed rules</h4><div class="mut">Rules creators often dismiss may be unclear or too strict.</div>${d.dismissed_rules.map(r=>`<div class="row" style="margin:4px 0"><span class="pill medium">${esc(r[0])}</span><span class="mut">dismissed ${r[1]} time(s)</span></div>`).join('')||'<div class="mut">No dismissals yet.</div>'}</div>`+cl}
 async function clarityHtml(){const d=await api('/api/clarity');const mgr=role()==='manager';
  const rows=d.rules.map(r=>`<div class="card"><b>${esc(r.rule_id)}</b> <span class="pill ${r.severity}">${esc(r.severity)}</span><span class="pill info">${esc(r.category)}</span>${r.tuned?'<span class="pill medium">tuned</span>':''}
  <div class="src">${esc(r.source)}</div><div class="mut">Flagged ${r.flagged}x, dismissed ${r.dismissed} (${Math.round(r.dismissal_rate*100)}%), fixes applied ${r.fixes_applied}. Reasons: ${esc(Object.entries(r.reasons).map(([k,v])=>k+' '+v).join(', ')||'none')}</div>
@@ -137,7 +196,7 @@ async function loadBench(){const el=$('#bench');el.innerHTML='<p class="mut">Run
  try{const d=await api('/api/benchmark');const r=d.rules,a=d.ai;
  const cat=Object.entries(r.by_category).map(([k,v])=>`<tr><td>${esc(k)}</td><td>${v.caught} of ${v.total}</td><td>${v.pct}%</td></tr>`).join('');
  const aiHtml=a.run===false?`<div class="mut">${esc(a.note)}</div>`:`<table><tr><th>Measure</th><th>Result</th></tr><tr><td>Items run</td><td>${a.items_run} (errors: ${a.errors})</td></tr><tr><td>AI caught, paraphrased or Hinglish issues</td><td>${a.ai_caught_of_ai_targeted} of ${a.ai_targeted_issues} (${a.ai_recall_pct}%)</td></tr><tr><td>Combined recall (rules + AI)</td><td>${a.combined_recall_pct}%</td></tr><tr><td>Clean posts with an AI finding</td><td>${a.clean_items_with_ai_finding} (${a.ai_false_alarm_pct}%)</td></tr><tr><td>AI findings citing a valid retrieved source</td><td>${a.with_valid_source_pct}%</td></tr><tr><td>AI findings marked cannot verify</td><td>${a.cannot_verify_pct}%</td></tr><tr><td>Answers rejected by the validator</td><td>${a.rejected_by_validator}</td></tr></table><div class="mut">Measured ${esc(a.run_at||'')}. ${esc(a.status||'')}</div>`;
- el.innerHTML=`<h3>Benchmark: ${r.items} sample posts</h3><p class="mut">Fictional brand Nourish Daily: ${r.clean_items} clean posts and ${r.planted_issues} planted issues, written by the team. The rule-targeted posts were written to match the rules, so a high score there is not independent proof. The rule results below were computed live on this server just now.</p>
+ el.innerHTML=`<div class="kpis"><div class="kpi"><div class="l">Issues caught</div><div class="v">${r.recall_pct}%</div><div class="s">${r.caught} of ${r.planted_issues} planted</div></div><div class="kpi"><div class="l">False alarms</div><div class="v">${r.false_alarm_rate_pct}%</div><div class="s">on ${r.clean_items} clean posts</div></div><div class="kpi"><div class="l">Cited findings</div><div class="v">${r.with_valid_citation_pct}%</div><div class="s">rule ID + source quote</div></div><div class="kpi"><div class="l">Cannot verify</div><div class="v">${r.cannot_verify_pct}%</div><div class="s">no approved source</div></div></div><h3>Benchmark: ${r.items} sample posts</h3><p class="mut">Fictional brand Nourish Daily: ${r.clean_items} clean posts and ${r.planted_issues} planted issues, written by the team. The rule-targeted posts were written to match the rules, so a high score there is not independent proof. The rule results below were computed live on this server just now.</p>
  <div class="card"><h4>Rule layer (no AI)</h4><table><tr><th>Measure</th><th>Result</th></tr><tr><td>Planted issues caught (all)</td><td>${r.caught} of ${r.planted_issues} (${r.recall_pct}%)</td></tr><tr><td>Rule-targeted issues caught</td><td>${r.recall_rule_targeted_pct}%</td></tr><tr><td>Paraphrased or Hinglish issues caught</td><td>${r.recall_ai_targeted_pct}% (a known weak spot; the AI layer is for these)</td></tr><tr><td>False alarms on clean posts (high or medium)</td><td>${r.false_alarm_items_high_medium} of ${r.clean_items} (${r.false_alarm_rate_pct}%)</td></tr><tr><td>Findings with a rule ID and source quote</td><td>${r.with_valid_citation_pct}%</td></tr><tr><td>Findings marked cannot verify</td><td>${r.cannot_verify_pct}%</td></tr></table></div>
  <div class="card"><h4>By category</h4><table><tr><th>Category</th><th>Caught</th><th>%</th></tr>${cat}</table></div>
  <div class="card"><h4>AI layer (Gemini with retrieval and a strict validator)</h4>${aiHtml}</div>

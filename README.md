@@ -18,7 +18,7 @@ explains why and cites the rule or approved source behind it, and a human makes 
 3. **Guideline clarity insights and the reviewer learning loop** (`app/tuning.py`, Insights tab): finds rules creators often dismiss or call
    unclear, proposes clearer wording or a lower severity, and applies a change only after a Manager approves. Facts and disclosure rules are never tuned.
 
-Other Round 3 changes: clearer errors and a timeout on every request (a failed or sleeping server no longer leaves a blank screen), the locked
+Other Round 3 changes: a redesigned interface (sidebar layout, summary cards, clearer finding cards, tables for the queue), clearer errors and a timeout on every request (a failed or sleeping server no longer leaves a blank screen), the locked
 Submit button now lists exactly what is still open, a title check before submitting, and 41 new automated tests (66 in total).
 
 ## Round 2 features (unchanged)
